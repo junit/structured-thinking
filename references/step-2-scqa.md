@@ -76,4 +76,24 @@ When formulating the **Expected Behavior (A→B)** or defining tasks in the **ST
 | "We need to fix the database performance soon." | "Add a composite index on `orders(user_id, created_at)` to bring the slow query list under 50ms by tomorrow morning." |
 | "Let's clean up the code to make it more readable." | "Refactor `large-auth-service.ts` by splitting its 6 methods into separate helper classes, reducing file size from 600 lines to under 200 lines by Friday." |
 
+## Pre-Mortem: Mitigating Risks Before Code Execution
+
+When defining expected behavior or formulating deployment plans (especially for high-risk changes like data migrations, system refactoring, or dependency updates), perform a **Pre-Mortem** to force defensive planning:
+
+1. **Assume Catastrophic Failure** — Fast-forward to the future and imagine that the change has failed spectacularly in production (e.g., database corrupted, API crashed under traffic).
+2. **Brainstorm the "Causes of Death"** — List 2-3 most probable reasons for this specific failure.
+3. **Pre-emptively Mitigate** — Add safeguard tasks to your active plan to prevent these causes from happening.
+
+### Pre-Mortem Plan Example:
+
+* **Goal**: Upgrade dependencies and refactor validation logic in the user login pipeline.
+* **Assumed Failure (Pre-Mortem)**: The login service is failing in production. Users cannot authenticate.
+* **Brainstormed Causes**:
+  * New validator library is throwing runtime exceptions for existing null values in legacy database records.
+  * Dependency mismatch caused a loading collision with the passport-jwt library.
+* **Safeguard Actions Deployed**:
+  * Run static test checks against 10,000 legacy DB snapshots locally.
+  * Audit exact peer dependency requirements in package.json before running install.
+
+
 

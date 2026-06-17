@@ -9,15 +9,15 @@ Before generating the final response, outline your thoughts in your `thought` bl
 - **A→B Target**: Who is the user (developer, manager, designer)? What decision or action should they make?
 - **SCQA Hook**: What is the context (S), what went wrong (C), what is the core question (Q), and what is my answer (A)?
 - **Pyramid Outline**: Map out the top-level conclusion and the supporting arguments.
-- **MECE Check**: Are the categories distinct and complete? Are they ordered logically (chronologically, structurally, or by importance)?
+- **Rule of Three / MECE Check**: Limit core items (findings, risks, steps) to 3 (±1) items. Synthesize longer lists into 3 main buckets. Ensure categories are distinct, complete, and ordered logically.
 
 ## Phase 2: Response Template
 
 Adopt this structured output layout:
 
-1. **Core Summary (Pyramid Top)** — A 1-2 sentence executive summary or recommendation at the very beginning.
+1. **Core Summary (Pyramid Top)** — A 1-2 sentence executive summary or recommendation at the very beginning (limited to 3 key points).
 2. **Context Hook (SCQA)** — A brief intro setting the stage.
-3. **Detailed Structure (Pyramid Body)** — Grouped and ordered sections with clear headings and bullet points. Use **bolding** to emphasize key actions.
+3. **Detailed Structure (Pyramid Body)** — Grouped and ordered sections with clear headings and bullet points. Limit main sections or lists to 3 (±1) items. Use **bolding** to emphasize key actions.
 4. **Visual Aid (Optional)** — Include a Mermaid diagram or table to illustrate workflows, architectures, or comparisons.
 
 ## Example Output Shape

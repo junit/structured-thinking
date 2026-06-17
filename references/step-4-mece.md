@@ -79,4 +79,16 @@ When presenting causes of a bug or multiple proposed solutions horizontally, avo
   2. **Secondary/Long-Tail Factors** (Grouped together or relegated to a "Future Considerations" category).
 * This preserves MECE structure (items are partitioned cleanly by impact tier) while preventing cognitive overload.
 
+### 4. The Rule of Three (For Cognitive Synthesis & Formatting)
+
+To avoid cognitive fatigue and ensure high-impact communication, apply the **Rule of Three**. The human brain retains information best when grouped in triads:
+
+* **Limit Core Items**: Whenever presenting recommendations, risks, plan steps, or diagnostic findings, restrict the list to exactly **3 (±1) items**.
+* **Synthesize Long Lists**: If you have 7-10 distinct points, do not present them as a flat list. Group them logically into 3 main buckets, and place the details inside those buckets.
+* **Application Areas**:
+  * **Summary**: Limit top-level takeaways to 3 points.
+  * **Plan**: Divide execution into 3 clear phases (e.g., Setup, Migration, Decommission).
+  * **Evidence**: Use 3 core supporting arguments to defend your main conclusion.
+
+
 
