@@ -48,27 +48,25 @@ After classifying, sequence items consistently. Within a **single branch**, pick
 
 **Anti-pattern:** Mixing orderings in the same branch creates confusion. If a list starts by importance, do not switch to chronological halfway through. Split into separate lists if you need both views.
 
-## Advanced MECE Taxonomy Patterns
+### 1. MoSCoW & Kano Model (For Scopes & Requirement Classification)
 
-When classifying software architectures, scopes, or features horizontally, leverage these specialized MECE patterns:
+When detailing a plan, project roadmap, or set of feature requirements, classify items horizontally using the **MoSCoW** and **Kano** frameworks to guarantee that every feature falls into exactly one distinct priority bucket (Mutually Exclusive) and covers all scope details (Collectively Exhaustive):
 
-### 1. MoSCoW Classification (For Scopes & Roadmaps)
+* **Must have (M) [Kano: Basic / 基本型]** — Non-negotiable requirements. Without these, the release or fix is considered a failure. (e.g., login works, data is saved). Ensure all Basic needs are completed first.
+* **Should have (S) [Kano: Performance / 期望型]** — Important but not vital. Satisfaction increases linearly with these features. (e.g., page loads in 100ms instead of 1s, bulk exports).
+* **Could have (C) [Kano: Excitement / 兴奋型]** — Nice-to-have features that delight the user but have low impact. (e.g., dark mode toggle, auto-complete AI diagnostics). Propose these *only* after Basic needs are met.
+* **Won't have (W) [Kano: Indifferent / 无差异型]** — Explicitly excluded from the current scope to prevent scope creep.
 
-When detailing a plan, project roadmap, or set of feature requirements, classify items horizontally using the **MoSCoW** framework. This guarantees that every feature falls into exactly one distinct priority bucket (Mutually Exclusive) and covers all scope details (Collectively Exhaustive):
-
-* **Must have (M)** — Non-negotiable requirements. Without these, the release or fix is considered a failure (e.g., security patching, core checkout pipeline).
-* **Should have (S)** — Important but not vital. If time is short, can be deferred to a later point (e.g., bulk exports, secondary user roles).
-* **Could have (C)** — Nice-to-have features that improve experience but have low impact (e.g., dark mode toggle, minor UI alignments).
-* **Won't have (W)** — Explicitly excluded from the current scope. Solves scope creep by aligning expectations upfront (e.g., multi-region clustering in v1).
-
-### 2. DDD Bounded Contexts (For Structural Decomposition)
+### 2. DDD Bounded Contexts & Ubiquitous Language (For Structural Decomposition)
 
 When describing or proposing a system architecture, avoid grouping purely by technical tiers (e.g., frontend, backend, database), as this leads to high coupling and cross-cutting concerns. Instead, decompose the system horizontally using **Domain-Driven Design (DDD) Bounded Contexts**:
 
 * Group code, endpoints, and databases by **business domain boundaries** (e.g., *User Authentication*, *Order Processing*, *Inventory Management*, *Payment Gateway*).
 * Ensure each context owns its model and datastore, creating clean logical boundaries.
 * This achieves **structural MECE** in systems representation, as each business capability belongs to exactly one domain context.
+* **DDD Ubiquitous Language (通用语言)**: Maintain strict term alignment between business concepts, documentation, database schemas, and code naming. Choose one term for a domain entity (e.g., select `Booking` or `Reservation`, but never mix both) to ensure semantic MECE and eliminate concept overlap.
 * **Conway's Law Constraint (康威定律约束)**: Ensure domain boundaries align with the organization's team structure and communication paths. Avoid proposing complex multi-module or microservice boundaries if the team size is too small to handle the integration and communication overhead. Keep architecture matched to team bandwidth.
+
 
 
 ### 3. Pareto 80/20 Rule (For Prioritization & Horizontal Ordering)

@@ -137,6 +137,25 @@ When communicating complex technical designs, system errors, or code logic, appl
 | "We are experiencing race conditions in our idempotent webhook handler due to unindexed unique keys." | "Two notification messages from Stripe arrived at the same millisecond. Because the database was slow, both were processed simultaneously, resulting in duplicate charges. We added a lock to ensure we only process one message at a time." |
 | "Implement a polymorphic decorator pattern to abstract repository access." | "Create a shared wrapper that lets us swap between saving data to local files or a cloud database without modifying the main application code." |
 
+## Fogg Behavior Model: Driving Developer Action (B=MAP)
+
+When formulating your **Expected Behavior (A→B)**, especially when writing integration guides, setup READMEs, or pull request instructions, apply the **Fogg Behavior Model** to ensure the Actor actually executes the target Behavior:
+
+$$\text{Behavior (B)} = \text{Motivation (M)} \times \text{Ability (A)} \times \text{Prompt (P)}$$
+
+To drive action, ensure all three elements converge:
+
+1. **Motivation (M) [动力]** — Address *Why* the developer should act (e.g., "resolves critical CVE," "improves query speed by 5x"). Link back to the **Golden Circle**.
+2. **Ability (A) [能力/易用性]** — Make the action as simple as possible. Minimize cognitive friction. Provide copy-pasteable shell commands, complete code blocks (no `// TODO: implement later` placeholders), and clear verification checks.
+3. **Prompt (P) [触发点]** — Give a clear, unambiguous call-to-action (e.g., "Run `npm run verify` to test the changes now," "Copy and paste this config block into your `.env`").
+
+### Guide Design Comparison:
+
+| High Friction (Anti-pattern) | Actionable Guide (B=MAP) |
+| :--- | :--- |
+| "Set up the database connection pool in your local config, import the pool client, and test if it works." | "**Step 1**: To prevent connection starvation under load (**Motivation**), copy and paste this block into `config.ts` (**Ability**):<br>`export const pool = new Pool({...});`<br>**Step 2**: Run `npm run test:db` now to verify the connection (**Prompt**)." |
+
+
 
 
 
