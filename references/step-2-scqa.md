@@ -95,5 +95,33 @@ When defining expected behavior or formulating deployment plans (especially for 
   * Run static test checks against 10,000 legacy DB snapshots locally.
   * Audit exact peer dependency requirements in package.json before running install.
 
+## The Golden Circle: Structuring Intent (Why → How → What)
+
+When communicating a goal, architectural change, or proposal to an audience, structure your explanation from the inside out using Simon Sinek's **Golden Circle** to establish immediate alignment and context:
+
+```
+      /-------------\
+     /   [ WHAT ]    \
+    /  /-----------\  \
+   /  /  [ HOW ]    \  \
+  /  /  /---------\  \  \
+  |  |  | [ WHY ] |  |  |
+  \  \  \---------/  /  /
+   \  \             /  /
+    \  \-----------/  /
+     \---------------/
+```
+
+1. **Why (Core Purpose)** — Why does this change matter? What is the systemic value? (Always start here).
+   * *Anti-pattern*: Starting with the file diff. (e.g., "I modified lines 45-60 in database.ts").
+   * *Correct*: "We need to eliminate SQL injection vulnerabilities to protect customer PII."
+2. **How (Process/Methodology)** — How does the change achieve the 'Why'? Which mechanisms or architectural patterns are used?
+   * *Correct*: "By replacing raw SQL strings with parameterized queries using the Prisma ORM layer."
+3. **What (The Output)** — What specific code, endpoints, or scripts were created or modified? (Mention this last).
+   * *Correct*: "Updated `getUserById` in `user-service.ts` to use Prisma's `findUnique` query."
+
+Always sequence your technical summaries and design headers as: **Why $\rightarrow$ How $\rightarrow$ What**.
+
+
 
 

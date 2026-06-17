@@ -53,3 +53,20 @@ When justifying a supporting conclusion or presenting evidence in your pyramid s
 1. **At the Support Layer**: State the conclusion based on functional requirements.
 2. **At the Evidence Layer**: Do not just quote tool names. Root the argument in fundamental computer science principles: network round-trip times (RTT), Big-O time complexity, database locks, thread blocking, memory allocation, or physical system constraints.
 
+## Occam's Razor: Pruning the Design Pyramid
+
+When evaluating multiple architectures, logic patterns, or solutions to a problem, apply **Occam's Razor**: *"Plurality should not be posited without necessity"* (or in software terms: the simplest solution with the fewest moving parts is usually the best).
+
+Apply this to prune complexity from your design pyramid:
+
+* **Reduce Layers**: Do not add abstraction layers (e.g., intermediate interfaces, factories, generic wrappers) unless you have an immediate requirement for polymorphism.
+* **Minimize Entities**: Prefer single-responsibility functions and cohesive modules over introducing new services, microservices, databases, or third-party dependencies.
+* **Keep Explanations Direct**: If 2 facts fully justify a conclusion, do not add 3 speculative justifications to the pyramid. Keep arguments tight.
+
+### Over-Engineered vs. Pruned Design Comparison:
+
+| Over-Engineered Pyramid (Anti-pattern) | Pruned Pyramid (Occam's Razor) |
+| :--- | :--- |
+| **Conclusion**: Add user billing support.<br>**Support**: Set up a payment microservice, deploy Kafka for event streaming, spin up DynamoDB for ledger records. | **Conclusion**: Add user billing support.<br>**Support**: Integrate Stripe SDK into the existing API, save transactions to the primary database using transactional checks. |
+
+
