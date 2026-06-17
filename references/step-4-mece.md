@@ -68,6 +68,8 @@ When describing or proposing a system architecture, avoid grouping purely by tec
 * Group code, endpoints, and databases by **business domain boundaries** (e.g., *User Authentication*, *Order Processing*, *Inventory Management*, *Payment Gateway*).
 * Ensure each context owns its model and datastore, creating clean logical boundaries.
 * This achieves **structural MECE** in systems representation, as each business capability belongs to exactly one domain context.
+* **Conway's Law Constraint (康威定律约束)**: Ensure domain boundaries align with the organization's team structure and communication paths. Avoid proposing complex multi-module or microservice boundaries if the team size is too small to handle the integration and communication overhead. Keep architecture matched to team bandwidth.
+
 
 ### 3. Pareto 80/20 Rule (For Prioritization & Horizontal Ordering)
 

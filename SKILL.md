@@ -37,10 +37,10 @@ Structured thinking is a communication method that organizes scattered informati
 
 | Step | Objective | Key Framework | Reference File |
 | :--- | :--- | :--- | :--- |
-| **1. Describe Problem** | Find root cause, not blame | 5W2H + 5-Why + Cynefin | [step-1-5w2h.md](file:///Users/wifibaby4u/LLM/structured-thinking/references/step-1-5w2h.md) |
+| **1. Describe Problem** | Find root cause, not blame | 5W2H + 5-Why + Cynefin + System Dynamics | [step-1-5w2h.md](file:///Users/wifibaby4u/LLM/structured-thinking/references/step-1-5w2h.md) |
 | **2. Goal & Audience** | Define target behavior | A→B + SCQA + STAR + SMART + Pre-Mortem + Golden Circle + Feynman | [step-2-scqa.md](file:///Users/wifibaby4u/LLM/structured-thinking/references/step-2-scqa.md) |
 | **3. Vertical Structure** | State conclusion first | Pyramid Principle + First Principles + Occam's Razor + Inductive Logic | [step-3-pyramid.md](file:///Users/wifibaby4u/LLM/structured-thinking/references/step-3-pyramid.md) |
-| **4. Horizontal Structure**| Logical categorization | MECE + MoSCoW + DDD + Pareto + Rule of 3 + Eisenhower | [step-4-mece.md](file:///Users/wifibaby4u/LLM/structured-thinking/references/step-4-mece.md) |
+| **4. Horizontal Structure**| Logical categorization | MECE + MoSCoW + DDD + Pareto + Rule of 3 + Eisenhower + Conway's Law | [step-4-mece.md](file:///Users/wifibaby4u/LLM/structured-thinking/references/step-4-mece.md) |
 | **5. Visualization** | Speed up comprehension | Diagrams/Tables + KT Matrix | [step-5-visualize.md](file:///Users/wifibaby4u/LLM/structured-thinking/references/step-5-visualize.md) |
 | **Agent Workflow** | Pre-compute and layout | Response Template + OODA Loop | [agent-workflow.md](file:///Users/wifibaby4u/LLM/structured-thinking/references/agent-workflow.md) |
 

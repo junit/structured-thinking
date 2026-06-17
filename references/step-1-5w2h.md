@@ -52,3 +52,13 @@ Before executing root-cause analysis (5-Why), categorize the problem using the *
 | **Complex** | Emergent/unpredictable behavior (e.g., race conditions, memory leaks). | **Probe $\rightarrow$ Sense $\rightarrow$ Respond** | **Do not guess.** You cannot solve by static analysis. Propose a *probe* first (e.g., add telemetry logs, run profilers, write repro script) to gather data before drawing conclusions. |
 | **Chaotic** | Emergency outage, data corruption. | **Act $\rightarrow$ Sense $\rightarrow$ Respond** | **Stop the bleeding first.** Take immediate action (rollback, rate-limit, revert config) to stabilize the system, then analyze. |
 
+## System Dynamics: Non-Linear Root-Cause Analysis
+
+While **5-Why** analyzes linear cause-effect chains, it fails for complex software bottlenecks (e.g., retry storms, memory crashes, connection pool starvation). For these, apply **System Dynamics** to analyze non-linear feedback loops of **Stocks** (resources like connection pools, RAM, CPU) and **Flows** (rates like RPS, allocation speed):
+
+* **Positive Reinforcing Loop (正反馈/增强回路)** — A cycle that accelerates system degradation (e.g., *Database CPU is high $\rightarrow$ queries slow down $\rightarrow$ API connections hold longer $\rightarrow$ client timeouts trigger retry storm $\rightarrow$ database crashes*).
+  * **Mitigation**: Do not apply naive linear fixes (like "increase query timeout," which keeps connections held longer). **Break the loop** (e.g., implement circuit breakers, rate limits, or exponential backoff with jitter).
+* **Negative Balancing Loop (负反馈/调节回路)** — A self-stabilizing cycle (e.g., *CPU load spikes $\rightarrow$ auto-scaler triggers $\rightarrow$ pod count increases $\rightarrow$ load per pod drops*).
+  * **Goal**: Maximize balancing loops to ensure system resilience.
+
+
