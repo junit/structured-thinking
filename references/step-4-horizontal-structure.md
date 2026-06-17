@@ -52,7 +52,7 @@ After classifying, sequence items consistently. Within a **single branch**, pick
 
 When detailing a plan, project roadmap, or set of feature requirements, classify items horizontally using the **MoSCoW** and **Kano** frameworks to guarantee that every feature falls into exactly one distinct priority bucket (Mutually Exclusive) and covers all scope details (Collectively Exhaustive):
 
-* **Must have (M) [Kano: Basic / 基本型]** — Non-negotiable requirements. Without these, the release or fix is considered a failure. (e.g., login works, data is saved). Ensure all Basic needs are completed first. These represent the core behaviors expected from the Actor (see [A→B Rule in Step 2](step-2-goal-audience.md#actor--behavior-ab-rule)).
+* **Must have (M) [Kano: Basic / 基本型]** — Non-negotiable requirements. Without these, the release or fix is considered a failure. (e.g., login works, data is saved). Ensure all Basic needs are completed first. These represent the core behaviors expected from the Actor (see [A→B Rule in Step 2](step-2-goal-audience.md#actor-behavior-a-b-rule)).
 * **Should have (S) [Kano: Performance / 期望型]** — Important but not vital. Satisfaction increases linearly with these features. (e.g., page loads in 100ms instead of 1s, bulk exports).
 * **Could have (C) [Kano: Excitement / 兴奋型]** — Nice-to-have features that delight the user but have low impact. (e.g., dark mode toggle, auto-complete AI diagnostics). Propose these *only* after Basic needs are met.
 * **Won't have (W) [Kano: Indifferent / 无差异型]** — Explicitly excluded from the current scope to prevent scope creep.
@@ -103,7 +103,7 @@ When organizing a list of tasks, refactoring suggestions, or bug fixes, categori
 > Quadrant 1 and Quadrant 2 tasks should be formulated as **SMART Goals** (Specific, Measurable, Achievable, Relevant, Time-bound) to ensure they are actionable. See [SMART Goals in Step 2](step-2-goal-audience.md#smart-goals-setting-actionable-targets).
 
 ## Related
-- **A→B Rule & expected behavior**: See [step-2-goal-audience.md](step-2-goal-audience.md#actor--behavior-ab-rule) to align MoSCoW priority with expected Actor behavior.
+- **A→B Rule & expected behavior**: See [step-2-goal-audience.md](step-2-goal-audience.md#actor-behavior-a-b-rule) to align MoSCoW priority with expected Actor behavior.
 - **SMART Goals**: See [step-2-goal-audience.md](step-2-goal-audience.md#smart-goals-setting-actionable-targets) to translate Eisenhower Quadrant 1 and 2 tasks into concrete, measurable goals.
 - **Vertical Structure**: See [step-3-vertical-structure.md](step-3-vertical-structure.md) to ensure each horizontally organized layer is properly supported by vertical logic.
 

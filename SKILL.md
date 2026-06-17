@@ -1,6 +1,6 @@
 ---
 name: structured-thinking
-description: "Use when organizing complex information for an audience: writing incident reports, postmortems, executive summaries, design documents, proposals, or presentation outlines. Triggered when there is a risk of presenting unstructured, raw, or chronological logs and details to executives, stakeholders, or teams. / 当需要向受众组织复杂信息时使用：编写故障报告、事后总结（Postmortem）、执行摘要、设计文档、提案或演示大纲。当有可能向管理层、利益相关者或团队展示无结构、原始或按时间顺序排列的日志和细节时触发。"
+description: "Use when organizing complex information for an audience: writing incident reports, postmortems, executive summaries, design documents, proposals, or presentation outlines. Triggered when there is a risk of presenting unstructured, raw, or chronological details."
 ---
 
 # Structured Thinking

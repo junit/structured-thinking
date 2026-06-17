@@ -1,6 +1,6 @@
 # Step 2: Define Goal and Audience (A→B Rule & SCQA)
 
-## Actor → Behavior (A→B) Rule
+## Actor Behavior (A-B) Rule
 
 Determine **who** will receive the message (the Actor) and **what behavior** you expect from them (the Behavior). Tailor every sentence to elicit that behavior; omit details that do not serve it.
 
@@ -70,7 +70,7 @@ When formulating the **Expected Behavior (A→B)** or defining tasks in the **ST
 * **Time-bound (T)** — State a clear deadline, estimation, or window. (e.g., "restore connection pool limits in 5 minutes," "deliver the refactoring proposal by end-of-day").
 
 > [!TIP]
-> Once your goals are defined using the SMART framework, prioritize the resulting tasks using the [Eisenhower Matrix in Step 4](step-4-horizontal-structure.md#5-eisenhower-matrix-for-task-prioritization--scoping).
+> Once your goals are defined using the SMART framework, prioritize the resulting tasks using the [Eisenhower Matrix in Step 4](step-4-horizontal-structure.md#eisenhower-matrix-for-task-prioritization-scoping).
 
 ### Anti-pattern vs. SMART Goal Comparison:
 
@@ -88,7 +88,7 @@ When defining expected behavior or formulating deployment plans (especially for 
 3. **Pre-emptively Mitigate** — Add safeguard tasks to your active plan to prevent these causes from happening.
 
 > [!TIP]
-> To quantitatively prioritize these brainstormed risks, map them into a Probability vs. Severity threat matrix. See [Step 5 Risk Assessment](step-5-visualize.md#3-risk-assessment-for-clickhouse---high-score-option) for a scoring template ($P \times S$).
+> To quantitatively prioritize these brainstormed risks, map them into a Probability vs. Severity threat matrix. See [Step 5 Risk Assessment](step-5-visualize.md#3-risk-assessment-for-clickhouse-high-score-option) for a scoring template ($P \times S$).
 
 ### Pre-Mortem Plan Example:
 
@@ -163,8 +163,8 @@ To drive action, ensure all three elements converge:
 | "Set up the database connection pool in your local config, import the pool client, and test if it works." | "**Step 1**: To prevent connection starvation under load (**Motivation**), copy and paste this block into `config.ts` (**Ability**):<br>`export const pool = new Pool({...});`<br>**Step 2**: Run `npm run test:db` now to verify the connection (**Prompt**)." |
 
 ## Related
-- **Eisenhower Matrix Task Scoping**: See [step-4-horizontal-structure.md](step-4-horizontal-structure.md#5-eisenhower-matrix-for-task-prioritization--scoping) to prioritize tasks generated from your SMART goals.
-- **Risk Assessment**: See [step-5-visualize.md](step-5-visualize.md#3-risk-assessment-for-clickhouse---high-score-option) to score Pre-Mortem risks.
+- **Eisenhower Matrix Task Scoping**: See [step-4-horizontal-structure.md](step-4-horizontal-structure.md#eisenhower-matrix-for-task-prioritization-scoping) to prioritize tasks generated from your SMART goals.
+- **Risk Assessment**: See [step-5-visualize.md](step-5-visualize.md#3-risk-assessment-for-clickhouse-high-score-option) to score Pre-Mortem risks.
 - **Fogg B=MAP Integration**: Use the Agent Workflow in [agent-workflow.md](agent-workflow.md#phase-2-response-template) to structure your final response and maximize the user's ability to take action.
 
 
