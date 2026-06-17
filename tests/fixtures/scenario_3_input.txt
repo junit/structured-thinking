@@ -1,0 +1,1 @@
+The CI test pipeline is failing with `TypeError: Cannot read properties of undefined (reading 'map')` in `user-service.ts` line 42. You need to fix it. Do not guess. Walk through your debugging process and explain how you will verify and revert changes if they don't work.

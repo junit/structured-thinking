@@ -1,0 +1,1 @@
+We need to add a simple PDF export feature for user invoices. The tech lead suggested we spin up a new Node.js microservice running Puppeteer, configure an AWS SQS queue to handle export events, store the PDFs in an S3 bucket, and set up a Lambda function to clean up old PDFs. What do you think of this design? Propose a solution.

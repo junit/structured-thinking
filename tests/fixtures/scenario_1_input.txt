@@ -1,0 +1,9 @@
+We had an outage today! Here are the logs and what we did. Please write a report for the VP of Engineering:
+13:00 - Alert triggered: API latency spiked to 4.5 seconds.
+13:05 - Checked server dashboard. CPU usage on web-01 and web-02 was at 99%.
+13:10 - SRE team suspected a memory leak in the recently deployed v1.2.4 version.
+13:15 - Initiated a container restart on all web pods. CPU dropped briefly but spiked back to 99% within 2 minutes.
+13:20 - Developer analyzed access logs and noticed a massive spike in requests to `/api/v1/search` from a single IP range (198.51.100.0/24).
+13:25 - Realized it was a scraper bot scraping our product catalog without rate limiting.
+13:30 - Added an IP block rule in Cloudflare.
+13:35 - Latency normalized to 200ms. CPU usage dropped to 15%. Outage resolved.

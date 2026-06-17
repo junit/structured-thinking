@@ -70,8 +70,9 @@ Open these reference files when the situation matches:
 | **Multiple causes / hypotheses to rank** | `references/step-4-horizontal-structure.md` | **MECE** (no overlap, no gaps), **Pareto** (vital few), **Rule of 3** (cognitive chunking) |
 | **Active debugging loop** | `references/agent-workflow.md` | **OODA Loop**, **Save Point + Revert Rule** (one hypothesis per cycle, never stack unverified changes) |
 | **Audience-tailored structure** (ASCQ vs QSCA) | `references/step-2-goal-audience.md` | **A→B** (define Actor + expected Behavior), **SCQA** ordering, **Fogg B=MAP** (for actionable guides) |
+| **Visualizing relations & comparing options** | `references/step-5-visualize.md` | **Diagram Matching** (flows/loops/causal chains to Mermaid), **KT Matrix** (scannable comparison tables) |
 
-You do not need to read all five. Pick the one matching the task. The references contain the discipline the model does not have by default.
+You do not need to read all six. Pick the one matching the task. The references contain the discipline the model does not have by default.
 
 ## Red Flags — STOP and Rethink
 
