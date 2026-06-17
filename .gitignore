@@ -1,0 +1,15 @@
+# Tool Cache & Config
+.serena/
+
+# IDE & Editor Settings
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS Specific
+.DS_Store
+Thumbs.db
