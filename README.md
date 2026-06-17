@@ -17,11 +17,11 @@ A systematic framework designed to help AI agents, coding assistants, and softwa
 - [Before vs. After Comparison](#-before-vs-after-comparison)
 - [Project Directory Structure](#-project-directory-structure)
 - [The 5-Step Framework](#-the-5-step-framework)
-  - [Step 1: Describe the Problem (5W2H & 5-Why)](#step-1-describe-the-problem-5w2h--5-why)
-  - [Step 2: Define Goal & Audience (A→B Rule & SCQA)](#step-2-define-goal--audience-ab-rule--scqa)
-  - [Step 3: Structure Vertically (Pyramid Principle)](#step-3-structure-vertically-pyramid-principle)
-  - [Step 4: Organize Horizontally (MECE & Ordering)](#step-4-organize-horizontally-mece--ordering)
-  - [Step 5: Visualize Relationships](#step-5-visualize-relationships)
+  - [Step 1: Describe the Problem (5W2H, 5-Why, Cynefin, System Dynamics)](#step-1-describe-the-problem-5w2h-5-why-cynefin-system-dynamics)
+  - [Step 2: Define Goal & Audience (A→B, SCQA, STAR, SMART, Pre-Mortem, Golden Circle, Feynman, Fogg)](#step-2-define-goal--audience-ab-scqa-star-smart-pre-mortem-golden-circle-feynman-fogg)
+  - [Step 3: Structure Vertically (Pyramid Principle, First Principles, Occam's Razor, Inductive Logic)](#step-3-structure-vertically-pyramid-principle-first-principles-occams-razor-inductive-logic)
+  - [Step 4: Organize Horizontally (MECE, MoSCoW/Kano, DDD/Conway/Language, Pareto, Rule of 3, Eisenhower)](#step-4-organize-horizontally-mece-moscowkano-dddconwaylanguage-pareto-rule-of-3-eisenhower)
+  - [Step 5: Visualize Relationships (Diagram Matching, Kepner-Tregoe Matrix)](#step-5-visualize-relationships-diagram-matching-kepner-tregoe-matrix)
 - [How to Integrate with AI Agents](#-how-to-integrate-with-ai-agents)
   - [Integrating with Claude Code / Gemini CLI](#integrating-with-claude-code--gemini-cli)
   - [Integrating with Cursor / Windsurf / VS Code](#integrating-with-cursor--windsurf--vs-code)
@@ -63,54 +63,62 @@ This repository is organized as a plug-and-play instruction set for LLMs and dev
 .
 ├── SKILL.md                 # Main agent skill definition & rules
 └── references/              # In-depth framework guides
-    ├── agent-workflow.md    # Pre-computation steps and output layout templates
-    ├── step-1-5w2h.md       # Root-cause analysis via 5W2H & 5-Why
-    ├── step-2-scqa.md       # SCQA storytelling structures & A→B rules
-    ├── step-3-pyramid.md    # The Pyramid Principle (Vertical Structuring)
-    ├── step-4-mece.md       # MECE taxonomy & Horizontal ordering rules
-    └── step-5-visualize.md  # Relationship visualization selection guide
+    ├── agent-workflow.md    # Pre-computation (Thought) & Response Template (w/ OODA Loop)
+    ├── step-1-5w2h.md       # Problem description (5W2H, 5-Why, Cynefin, System Dynamics)
+    ├── step-2-scqa.md       # Goal & Audience (A→B, SCQA, STAR, SMART, Pre-Mortem, Golden Circle, Feynman, Fogg)
+    ├── step-3-pyramid.md    # Vertical Structure (Pyramid Principle, First Principles, Occam's Razor, Inductive Logic)
+    ├── step-4-mece.md       # Horizontal Structure (MECE, MoSCoW/Kano, DDD/Conway/Language, Pareto, Rule of 3, Eisenhower)
+    └── step-5-visualize.md  # Relationship visualization & Kepner-Tregoe Decision Matrix
 ```
 
 ---
 
 ## 🛠️ The 5-Step Framework
 
-### Step 1: Describe the Problem (5W2H & 5-Why)
+### Step 1: Describe the Problem (5W2H, 5-Why, Cynefin, System Dynamics)
 Before communicating a problem, analyze it objectively:
-- **5W2H** (*What, When, Where, Why, Who, How, How much*) captures the full scope of the incident.
-- **5-Why** drills down past superficial symptoms to uncover systemic process-level root causes rather than blaming individuals.
-- *Refer to [references/step-1-5w2h.md](references/step-1-5w2h.md) for examples.*
+- **5W2H**: Capture the full scope (What, When, Where, Why, Who, How, How much).
+- **5-Why**: Drill down to systemic process-level root causes instead of placing blame.
+- **Cynefin Complexity**: Categorize the problem domain (Clear, Complicated, Complex, Chaotic) to select the correct approach. For *Complex* domains (e.g., race conditions), **probe first** (logs/tests) instead of guessing.
+- **System Dynamics**: Analyze non-linear feedback loops (e.g., retry storms) to break vicious cycles rather than applying naive linear fixes.
+- *Refer to [references/step-1-5w2h.md](references/step-1-5w2h.md) for details.*
 
-### Step 2: Define Goal & Audience (A→B Rule & SCQA)
+### Step 2: Define Goal & Audience (A→B, SCQA, STAR, SMART, Pre-Mortem, Golden Circle, Feynman, Fogg)
 Tailor communication to drive action:
-- **A→B Rule**: Define the **Actor** and the expected **Behavior**. Omit details that do not prompt the Actor to perform the Behavior.
-- **SCQA Hook**: Introduce the context using **S**cenario, **C**omplication, **Q**uestion, and **A**nswer. Depending on the audience's patience and goals, choose the optimal layout order:
-  - **ASCQ** (Answer first): Best for impatient executives.
-  - **QSCA** (Problem first): Best for complacent stakeholders who need to feel the pain.
+- **A→B Rule**: Define the **Actor** and target **Behavior**. Remove noise that doesn't trigger the behavior.
+- **SCQA Hook**: Contextualize with Scenario, Complication, Question, and Answer. Choose the optimal order (e.g., *ASCQ* for conclusion-first to executives).
+- **STAR Method**: Structure incident histories and logs as Situation, Task, Action, and Result.
+- **SMART Goals**: Formulate specific, measurable, achievable, relevant, and time-bound goals.
+- **Pre-Mortem**: Assume the release has failed catastrophically in production and implement safeguards pre-emptively.
+- **Golden Circle**: Sequence explanations starting from the inner circle: **Why $\rightarrow$ How $\rightarrow$ What**.
+- **Feynman Technique**: Explain complex systems in plain language using real-world analogies.
+- **Fogg Behavior Model (B=MAP)**: Align Motivation, Ability (simplify CLI/code), and Prompt (clear CTA) to enable execution.
 - *Refer to [references/step-2-scqa.md](references/step-2-scqa.md) for details.*
 
-### Step 3: Structure Vertically (Pyramid Principle)
-Organize your argument hierarchically:
-- Place the **Main Conclusion/Recommendation** at the top.
-- Cluster supporting arguments underneath.
-- Ground the bottom layer with factual evidence.
-- Ensure every node in the pyramid has a clear purpose (a single-sentence takeaway).
-- *Refer to [references/step-3-pyramid.md](references/step-3-pyramid.md) for visual structures.*
+### Step 3: Structure Vertically (Pyramid Principle, First Principles, Occam's Razor, Inductive Logic)
+Organize your arguments hierarchically:
+- **Pyramid Principle**: Place the main conclusion at the top, supported by grouped sub-conclusions and factual evidence below.
+- **First Principles**: Root technical arguments in fundamental truths (e.g., CPU cycles, network latency) instead of lazy analogies (e.g., "industry standard").
+- **Occam's Razor**: Choose the technical design or logical structure with the fewest moving parts and assumptions. Avoid over-engineering.
+- **Inductive Logic**: Prefer inductive grouping (conclusion followed by parallel facts) over deductive chains to speed up comprehension.
+- *Refer to [references/step-3-pyramid.md](references/step-3-pyramid.md) for details.*
 
-### Step 4: Organize Horizontally (MECE & Ordering)
-Ensure logical categorization at every horizontal level:
-- **MECE** (*Mutually Exclusive, Collectively Exhaustive*): Ensure no items overlap, and no gaps are left.
-- Classify ideas using standard dimensions: **Temporal** (time), **Structural** (space/components), **Qualitative** (attributes/pros-cons), or **Quantitative** (rank/impact).
-- Sequence ideas consistently within a group (e.g., do not mix chronological ordering with ranking by importance).
-- *Refer to [references/step-4-mece.md](references/step-4-mece.md) for exercises.*
+### Step 4: Organize Horizontally (MECE, MoSCoW/Kano, DDD/Conway/Language, Pareto, Rule of 3, Eisenhower)
+Ensure logical categorization at every level:
+- **MECE**: Categorize horizontally without overlap (Mutually Exclusive) and without gaps (Collectively Exhaustive).
+- **MoSCoW & Kano Model**: Bucket requirements and features strictly by priority (Must/Basic, Should/Performance, Could/Excitement, Won't/Indifferent).
+- **DDD Contexts & Ubiquitous Language**: Separate complex systems by business domain contexts. Enforce strict term alignment across code and documentation to ensure semantic MECE.
+- **Conway's Law Constraint**: Align system design boundaries with team organizational boundaries to manage communication overhead.
+- **Pareto 80/20 Rule**: Prioritize and highlight the 20% core drivers that cause 80% of the impact.
+- **The Rule of Three**: Limit lists of recommendations, risks, or phases to 3 (±1) items to avoid cognitive fatigue.
+- **Eisenhower Matrix**: Categorize tasks by urgency and importance, focusing energy on Quadrant 1 and ignoring Quadrant 4.
+- *Refer to [references/step-4-mece.md](references/step-4-mece.md) for details.*
 
-### Step 5: Visualize Relationships
-When plain text is slow to comprehend, use structural visuals:
-- Map processes with **flowcharts** or **swimlanes**.
-- Compare options using **tables** or **matrices**.
-- Map system models using **node-link graphs** or **block diagrams**.
-- Prefer lightweight syntax like **Mermaid** inline in markdown.
-- *Refer to [references/step-5-visualize.md](references/step-5-visualize.md) for diagram matching.*
+### Step 5: Visualize Relationships (Diagram Matching, Kepner-Tregoe Matrix)
+Enhance comprehension with structural layouts:
+- **Diagram Matching**: Map relationships to correct visuals (flows to *flowcharts*, models to *dependency graphs*, loops to *cycles*) using Mermaid syntax.
+- **Kepner-Tregoe (KT) Matrix**: Create weighted comparison tables evaluating alternatives against mandatory MUSTs and weighted WANTs, followed by risk multiplication ($P \times S$).
+- *Refer to [references/step-5-visualize.md](references/step-5-visualize.md) for templates.*
 
 ---
 
@@ -119,7 +127,7 @@ When plain text is slow to comprehend, use structural visuals:
 This repository is designed to be directly readable by AI agents (e.g., Claude Code, Cursor, Windsurf, or custom LLM setups) to guide their behavior.
 
 ### Integrating with Claude Code / Gemini CLI
-Copy the contents of `SKILL.md` to your system prompt or custom instructions configuration. When the agent acts as your coding assistant, it will automatically apply structured thinking when writing postmortems, task lists, or design explanations.
+Copy the contents of `SKILL.md` to your system prompt or custom instructions configuration. The agent will automatically apply structured thinking and use the **OODA Loop** (Observe, Orient, Decide, Act) to govern terminal debugging and task execution.
 
 ### Integrating with Cursor / Windsurf / VS Code
 Create or append to your `.cursorrules` or `.windsurfrules` file at the root of your workspace:
