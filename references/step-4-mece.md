@@ -90,5 +90,17 @@ To avoid cognitive fatigue and ensure high-impact communication, apply the **Rul
   * **Plan**: Divide execution into 3 clear phases (e.g., Setup, Migration, Decommission).
   * **Evidence**: Use 3 core supporting arguments to defend your main conclusion.
 
+### 5. Eisenhower Matrix (For Task Prioritization & Scoping)
+
+When organizing a list of tasks, refactoring suggestions, or bug fixes, categorize them horizontally into MECE priority quadrants using the **Eisenhower Matrix** to prevent scope drift and optimize developer focus:
+
+| Importance / Urgency | Urgent | Not Urgent |
+| :--- | :--- | :--- |
+| **Important** | **Quadrant 1: Do First**<br>• Critical bug fixes<br>• Security vulnerabilities<br>• Main task deliverables | **Quadrant 2: Schedule**<br>• Technical debt refactoring<br>• Writing unit/integration tests<br>• Context documentation |
+| **Not Important** | **Quadrant 3: Automate/Delegate**<br>• Code formatting changes<br>• Minor style adjustments<br>• Administrative tasks | **Quadrant 4: Eliminate**<br>• Speculative optimization<br>• Unused feature updates<br>• Premature scaling config |
+
+* **Execution Rule**: Focus 80% of active development energy on **Quadrant 1**. Propose **Quadrant 2** items as optional future work. Aggressively ignore or automate **Quadrant 3 & 4** items.
+
+
 
 

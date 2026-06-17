@@ -122,6 +122,22 @@ When communicating a goal, architectural change, or proposal to an audience, str
 
 Always sequence your technical summaries and design headers as: **Why $\rightarrow$ How $\rightarrow$ What**.
 
+## The Feynman Technique: Simplifying Explanations for Your Audience
+
+When communicating complex technical designs, system errors, or code logic, apply the **Feynman Technique** to ensure your audience (regardless of their technical background) can comprehend the issue instantly:
+
+1. **Target the Simplest Language** — Explain the topic as if explaining it to a non-technical peer or a 10-year-old. Remove abstract jargon.
+2. **Use Real-World Analogies** — Map abstract computer science concepts to physical world scenarios.
+3. **Identify and Fill Gaps** — If you struggle to explain a mechanism simply, it means your understanding of the codebase is incomplete. Go back and research.
+
+### Jargon Translation Guide:
+
+| Technical Jargon (Anti-pattern) | Simplified Analogy (Feynman Technique) |
+| :--- | :--- |
+| "We are experiencing race conditions in our idempotent webhook handler due to unindexed unique keys." | "Two notification messages from Stripe arrived at the same millisecond. Because the database was slow, both were processed simultaneously, resulting in duplicate charges. We added a lock to ensure we only process one message at a time." |
+| "Implement a polymorphic decorator pattern to abstract repository access." | "Create a shared wrapper that lets us swap between saving data to local files or a cloud database without modifying the main application code." |
+
+
 
 
 
