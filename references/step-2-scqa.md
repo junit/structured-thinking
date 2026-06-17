@@ -39,3 +39,23 @@ Structure your opening to capture attention in four moves:
 - **S**: We currently run PostgreSQL 11, which is end-of-life this November.
 - **C**: EOL means no security patches; our compliance review will fail.
 - **Q**: How do we stay compliant without downtime?
+
+## STAR Framework: Detailing the Action Steps
+
+While **SCQA** is the ideal storytelling hook to capture attention and frame a situation, the **STAR** framework is the best methodology for detailing the **Actions** and **Results** of a plan or incident resolution (especially in postmortems, task execution logs, and contributions):
+
+1. **Situation (S)** — Describe the specific state of the system or business when the event happened.
+2. **Task (T)** — Clarify what was required to resolve the situation, including metrics, constraints, and targets.
+3. **Action (A)** — Outline the exact steps taken. Highlight technical decisions, debugging tasks, or code modifications.
+4. **Result (R)** — Share the quantifiable outcome (e.g., performance impact, cost saved, time restored).
+
+### Combining SCQA and STAR
+
+Use **SCQA** to write the executive-level introduction (conclusion-first), then use **STAR** to structure the body sections explaining what was actually executed.
+
+**Example (STAR structure for an Incident Remediation section):**
+* **Situation**: CPU utilization on API gateways spiked to 98% at 14:00, causing 502 Bad Gateway errors for 15% of checkout traffic.
+* **Task**: Reduce CPU utilization below 50% and restore 100% checkout success rate within 15 minutes.
+* **Action**: Identified a rogue loop in the logging middleware, deployed a hotfix to bypass it, and scaled gateway pods from 3 to 10 replicas.
+* **Result**: CPU utilization dropped to 22%, 502 errors ceased, and the checkout success rate returned to 100% within 12 minutes.
+
