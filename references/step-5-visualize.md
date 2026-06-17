@@ -24,7 +24,35 @@ Pick the diagram type that matches the relationship you are communicating:
 - **Tables** — preferred for structured comparisons
 - **External tools** — draw.io, Excalidraw for hand-drawn feel; native chart libraries for data
 
+## Mermaid Template: Cause-and-Effect Tree (Fishbone Variant)
+
+When presenting the root causes of a complex incident (Step 1), use a **horizontal Mermaid tree** to visualize the relationship between the primary disaster (the "fish head") and its contributing categories and sub-causes:
+
+```mermaid
+graph LR
+    Disaster["Disaster: DB CPU at 100%"]
+
+    %% MECE Categories (The Fish Ribs)
+    Infra["Infrastructure"] --> Disaster
+    AppCode["Application Code"] --> Disaster
+    Client["Client Behavior"] --> Disaster
+    Process["Deployment Process"] --> Disaster
+
+    %% Sub-causes (Fine Bones)
+    DiskIO["Slow Disk IOPS"] --> Infra
+    ConnLimit["Low Max Connections"] --> Infra
+
+    NoIndex["Missing Index on orders"] --> AppCode
+    Leak["Connection Leak in middleware"] --> AppCode
+
+    Storm["Retry Storm during spike"] --> Client
+    HeavyQuery["Ad-hoc Analytics query"] --> Client
+
+    NoReview["No schema checklist review"] --> Process
+```
+
 ## Anti-patterns
+
 
 - Using a pie chart for >7 slices (unreadable)
 - Using a flowchart for a 2-step process (overkill)
