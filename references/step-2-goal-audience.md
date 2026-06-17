@@ -69,6 +69,9 @@ When formulating the **Expected Behavior (A→B)** or defining tasks in the **ST
 * **Relevant (R)** — Align the goal with the parent problem. (e.g., if the user's constraint is network egress cost, optimizing CPU usage is secondary).
 * **Time-bound (T)** — State a clear deadline, estimation, or window. (e.g., "restore connection pool limits in 5 minutes," "deliver the refactoring proposal by end-of-day").
 
+> [!TIP]
+> Once your goals are defined using the SMART framework, prioritize the resulting tasks using the [Eisenhower Matrix in Step 4](step-4-horizontal-structure.md#5-eisenhower-matrix-for-task-prioritization--scoping).
+
 ### Anti-pattern vs. SMART Goal Comparison:
 
 | Vague Goal (Anti-pattern) | SMART Goal |
@@ -83,6 +86,9 @@ When defining expected behavior or formulating deployment plans (especially for 
 1. **Assume Catastrophic Failure** — Fast-forward to the future and imagine that the change has failed spectacularly in production (e.g., database corrupted, API crashed under traffic).
 2. **Brainstorm the "Causes of Death"** — List 2-3 most probable reasons for this specific failure.
 3. **Pre-emptively Mitigate** — Add safeguard tasks to your active plan to prevent these causes from happening.
+
+> [!TIP]
+> To quantitatively prioritize these brainstormed risks, map them into a Probability vs. Severity threat matrix. See [Step 5 Risk Assessment](step-5-visualize.md#3-risk-assessment-for-clickhouse---high-score-option) for a scoring template ($P \times S$).
 
 ### Pre-Mortem Plan Example:
 
@@ -99,17 +105,20 @@ When defining expected behavior or formulating deployment plans (especially for 
 
 When communicating a goal, architectural change, or proposal to an audience, structure your explanation from the inside out using Simon Sinek's **Golden Circle** to establish immediate alignment and context:
 
-```
-      /-------------\
-     /   [ WHAT ]    \
-    /  /-----------\  \
-   /  /  [ HOW ]    \  \
-  /  /  /---------\  \  \
-  |  |  | [ WHY ] |  |  |
-  \  \  \---------/  /  /
-   \  \             /  /
-    \  \-----------/  /
-     \---------------/
+```mermaid
+flowchart TB
+    subgraph WhatSub ["[ WHAT ] - specific code, endpoints, output"]
+        subgraph HowSub ["[ HOW ] - process, mechanisms, architecture"]
+            subgraph WhySub ["[ WHY ] - core purpose, systemic value (Start here)"]
+                Why["Why are we doing this?"]
+            end
+            How["How does it work?"]
+        end
+        What["What is changing?"]
+    end
+    style WhySub fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    style HowSub fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+    style WhatSub fill:#fff3e0,stroke:#e65100,stroke-width:2px
 ```
 
 1. **Why (Core Purpose)** — Why does this change matter? What is the systemic value? (Always start here).
@@ -151,9 +160,12 @@ To drive action, ensure all three elements converge:
 
 ### Guide Design Comparison:
 
-| High Friction (Anti-pattern) | Actionable Guide (B=MAP) |
-| :--- | :--- |
 | "Set up the database connection pool in your local config, import the pool client, and test if it works." | "**Step 1**: To prevent connection starvation under load (**Motivation**), copy and paste this block into `config.ts` (**Ability**):<br>`export const pool = new Pool({...});`<br>**Step 2**: Run `npm run test:db` now to verify the connection (**Prompt**)." |
+
+## Related
+- **Eisenhower Matrix Task Scoping**: See [step-4-horizontal-structure.md](step-4-horizontal-structure.md#5-eisenhower-matrix-for-task-prioritization--scoping) to prioritize tasks generated from your SMART goals.
+- **Risk Assessment**: See [step-5-visualize.md](step-5-visualize.md#3-risk-assessment-for-clickhouse---high-score-option) to score Pre-Mortem risks.
+- **Fogg B=MAP Integration**: Use the Agent Workflow in [agent-workflow.md](agent-workflow.md#phase-2-response-template) to structure your final response and maximize the user's ability to take action.
 
 
 

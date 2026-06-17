@@ -95,3 +95,10 @@ When presenting technical proposals or trade-off decisions between multiple opti
 | :--- | :--- | :--- | :--- | :--- |
 | Team lacks ClickHouse operational knowledge | 7 | 6 | **42** | Purchase Managed ClickHouse (Altinity/ClickHouse Cloud) |
 
+> [!TIP]
+> This risk assessment scoring structure directly quantifies risks brainstormed during your defensive planning. See [Pre-Mortem in Step 2](step-2-goal-audience.md#pre-mortem-mitigating-risks-before-code-execution).
+
+## Related
+- **Pre-Mortem Risk Brainstorming**: See [step-2-goal-audience.md](step-2-goal-audience.md#pre-mortem-mitigating-risks-before-code-execution) to discover potential failure causes before quantifying them in the threat matrix.
+- **Cause-and-Effect Analysis**: See [step-1-problem-diagnosis.md](step-1-problem-diagnosis.md) to explore the system root causes that feed into your diagrams.
+

@@ -48,16 +48,16 @@ After classifying, sequence items consistently. Within a **single branch**, pick
 
 **Anti-pattern:** Mixing orderings in the same branch creates confusion. If a list starts by importance, do not switch to chronological halfway through. Split into separate lists if you need both views.
 
-### 1. MoSCoW & Kano Model (For Scopes & Requirement Classification)
+## MoSCoW & Kano Model (For Scopes & Requirement Classification)
 
 When detailing a plan, project roadmap, or set of feature requirements, classify items horizontally using the **MoSCoW** and **Kano** frameworks to guarantee that every feature falls into exactly one distinct priority bucket (Mutually Exclusive) and covers all scope details (Collectively Exhaustive):
 
-* **Must have (M) [Kano: Basic / 基本型]** — Non-negotiable requirements. Without these, the release or fix is considered a failure. (e.g., login works, data is saved). Ensure all Basic needs are completed first.
+* **Must have (M) [Kano: Basic / 基本型]** — Non-negotiable requirements. Without these, the release or fix is considered a failure. (e.g., login works, data is saved). Ensure all Basic needs are completed first. These represent the core behaviors expected from the Actor (see [A→B Rule in Step 2](step-2-goal-audience.md#actor--behavior-ab-rule)).
 * **Should have (S) [Kano: Performance / 期望型]** — Important but not vital. Satisfaction increases linearly with these features. (e.g., page loads in 100ms instead of 1s, bulk exports).
 * **Could have (C) [Kano: Excitement / 兴奋型]** — Nice-to-have features that delight the user but have low impact. (e.g., dark mode toggle, auto-complete AI diagnostics). Propose these *only* after Basic needs are met.
 * **Won't have (W) [Kano: Indifferent / 无差异型]** — Explicitly excluded from the current scope to prevent scope creep.
 
-### 2. DDD Bounded Contexts & Ubiquitous Language (For Structural Decomposition)
+## DDD Bounded Contexts & Ubiquitous Language (For Structural Decomposition)
 
 When describing or proposing a system architecture, avoid grouping purely by technical tiers (e.g., frontend, backend, database), as this leads to high coupling and cross-cutting concerns. Instead, decompose the system horizontally using **Domain-Driven Design (DDD) Bounded Contexts**:
 
@@ -67,9 +67,7 @@ When describing or proposing a system architecture, avoid grouping purely by tec
 * **DDD Ubiquitous Language (通用语言)**: Maintain strict term alignment between business concepts, documentation, database schemas, and code naming. Choose one term for a domain entity (e.g., select `Booking` or `Reservation`, but never mix both) to ensure semantic MECE and eliminate concept overlap.
 * **Conway's Law Constraint (康威定律约束)**: Ensure domain boundaries align with the organization's team structure and communication paths. Avoid proposing complex multi-module or microservice boundaries if the team size is too small to handle the integration and communication overhead. Keep architecture matched to team bandwidth.
 
-
-
-### 3. Pareto 80/20 Rule (For Prioritization & Horizontal Ordering)
+## Pareto 80/20 Rule (For Prioritization & Horizontal Ordering)
 
 When presenting causes of a bug or multiple proposed solutions horizontally, avoid displaying a flat list of 10+ items of equal weight. Apply the **Pareto Principle** to sort by importance and focus the audience on the vital few:
 
@@ -79,7 +77,7 @@ When presenting causes of a bug or multiple proposed solutions horizontally, avo
   2. **Secondary/Long-Tail Factors** (Grouped together or relegated to a "Future Considerations" category).
 * This preserves MECE structure (items are partitioned cleanly by impact tier) while preventing cognitive overload.
 
-### 4. The Rule of Three (For Cognitive Synthesis & Formatting)
+## The Rule of Three (For Cognitive Synthesis & Formatting)
 
 To avoid cognitive fatigue and ensure high-impact communication, apply the **Rule of Three**. The human brain retains information best when grouped in triads:
 
@@ -90,7 +88,7 @@ To avoid cognitive fatigue and ensure high-impact communication, apply the **Rul
   * **Plan**: Divide execution into 3 clear phases (e.g., Setup, Migration, Decommission).
   * **Evidence**: Use 3 core supporting arguments to defend your main conclusion.
 
-### 5. Eisenhower Matrix (For Task Prioritization & Scoping)
+## Eisenhower Matrix (For Task Prioritization & Scoping)
 
 When organizing a list of tasks, refactoring suggestions, or bug fixes, categorize them horizontally into MECE priority quadrants using the **Eisenhower Matrix** to prevent scope drift and optimize developer focus:
 
@@ -100,6 +98,14 @@ When organizing a list of tasks, refactoring suggestions, or bug fixes, categori
 | **Not Important** | **Quadrant 3: Automate/Delegate**<br>• Code formatting changes<br>• Minor style adjustments<br>• Administrative tasks | **Quadrant 4: Eliminate**<br>• Speculative optimization<br>• Unused feature updates<br>• Premature scaling config |
 
 * **Execution Rule**: Focus 80% of active development energy on **Quadrant 1**. Propose **Quadrant 2** items as optional future work. Aggressively ignore or automate **Quadrant 3 & 4** items.
+
+> [!TIP]
+> Quadrant 1 and Quadrant 2 tasks should be formulated as **SMART Goals** (Specific, Measurable, Achievable, Relevant, Time-bound) to ensure they are actionable. See [SMART Goals in Step 2](step-2-goal-audience.md#smart-goals-setting-actionable-targets).
+
+## Related
+- **A→B Rule & expected behavior**: See [step-2-goal-audience.md](step-2-goal-audience.md#actor--behavior-ab-rule) to align MoSCoW priority with expected Actor behavior.
+- **SMART Goals**: See [step-2-goal-audience.md](step-2-goal-audience.md#smart-goals-setting-actionable-targets) to translate Eisenhower Quadrant 1 and 2 tasks into concrete, measurable goals.
+- **Vertical Structure**: See [step-3-vertical-structure.md](step-3-vertical-structure.md) to ensure each horizontally organized layer is properly supported by vertical logic.
 
 
 

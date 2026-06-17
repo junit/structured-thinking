@@ -5,7 +5,7 @@
 </p>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/your-username/structured-thinking/pulls)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/junit/structured-thinking/pulls)
 [![LLM/AI Skill](https://img.shields.io/badge/AI%20Agent-Skill-orange.svg)](SKILL.md)
 
 A systematic framework designed to help AI agents, coding assistants, and software developers transform raw data, scattered logs, and chronological events into high-impact, audience-focused, and decision-ready communication.
@@ -64,10 +64,10 @@ This repository is organized as a plug-and-play instruction set for LLMs and dev
 ├── SKILL.md                 # Main agent skill definition & rules
 └── references/              # In-depth framework guides
     ├── agent-workflow.md    # Pre-computation (Thought) & Response Template (w/ OODA Loop)
-    ├── step-1-5w2h.md       # Problem description (5W2H, 5-Why, Cynefin, System Dynamics)
-    ├── step-2-scqa.md       # Goal & Audience (A→B, SCQA, STAR, SMART, Pre-Mortem, Golden Circle, Feynman, Fogg)
-    ├── step-3-pyramid.md    # Vertical Structure (Pyramid Principle, First Principles, Occam's Razor, Inductive Logic)
-    ├── step-4-mece.md       # Horizontal Structure (MECE, MoSCoW/Kano, DDD/Conway/Language, Pareto, Rule of 3, Eisenhower)
+    ├── step-1-problem-diagnosis.md     # Problem description (5W2H, 5-Why, Cynefin, System Dynamics)
+    ├── step-2-goal-audience.md         # Goal & Audience (A→B, SCQA, STAR, SMART, Pre-Mortem, Golden Circle, Feynman, Fogg)
+    ├── step-3-vertical-structure.md    # Vertical Structure (Pyramid Principle, First Principles, Occam's Razor, Inductive Logic)
+    ├── step-4-horizontal-structure.md  # Horizontal Structure (MECE, MoSCoW/Kano, DDD/Conway/Language, Pareto, Rule of 3, Eisenhower)
     └── step-5-visualize.md  # Relationship visualization & Kepner-Tregoe Decision Matrix
 ```
 
@@ -81,7 +81,7 @@ Before communicating a problem, analyze it objectively:
 - **5-Why**: Drill down to systemic process-level root causes instead of placing blame.
 - **Cynefin Complexity**: Categorize the problem domain (Clear, Complicated, Complex, Chaotic) to select the correct approach. For *Complex* domains (e.g., race conditions), **probe first** (logs/tests) instead of guessing.
 - **System Dynamics**: Analyze non-linear feedback loops (e.g., retry storms) to break vicious cycles rather than applying naive linear fixes.
-- *Refer to [references/step-1-5w2h.md](references/step-1-5w2h.md) for details.*
+- *Refer to [references/step-1-problem-diagnosis.md](references/step-1-problem-diagnosis.md) for details.*
 
 ### Step 2: Define Goal & Audience (A→B, SCQA, STAR, SMART, Pre-Mortem, Golden Circle, Feynman, Fogg)
 Tailor communication to drive action:
@@ -93,7 +93,7 @@ Tailor communication to drive action:
 - **Golden Circle**: Sequence explanations starting from the inner circle: **Why $\rightarrow$ How $\rightarrow$ What**.
 - **Feynman Technique**: Explain complex systems in plain language using real-world analogies.
 - **Fogg Behavior Model (B=MAP)**: Align Motivation, Ability (simplify CLI/code), and Prompt (clear CTA) to enable execution.
-- *Refer to [references/step-2-scqa.md](references/step-2-scqa.md) for details.*
+- *Refer to [references/step-2-goal-audience.md](references/step-2-goal-audience.md) for details.*
 
 ### Step 3: Structure Vertically (Pyramid Principle, First Principles, Occam's Razor, Inductive Logic)
 Organize your arguments hierarchically:
@@ -101,7 +101,7 @@ Organize your arguments hierarchically:
 - **First Principles**: Root technical arguments in fundamental truths (e.g., CPU cycles, network latency) instead of lazy analogies (e.g., "industry standard").
 - **Occam's Razor**: Choose the technical design or logical structure with the fewest moving parts and assumptions. Avoid over-engineering.
 - **Inductive Logic**: Prefer inductive grouping (conclusion followed by parallel facts) over deductive chains to speed up comprehension.
-- *Refer to [references/step-3-pyramid.md](references/step-3-pyramid.md) for details.*
+- *Refer to [references/step-3-vertical-structure.md](references/step-3-vertical-structure.md) for details.*
 
 ### Step 4: Organize Horizontally (MECE, MoSCoW/Kano, DDD/Conway/Language, Pareto, Rule of 3, Eisenhower)
 Ensure logical categorization at every level:
@@ -112,7 +112,7 @@ Ensure logical categorization at every level:
 - **Pareto 80/20 Rule**: Prioritize and highlight the 20% core drivers that cause 80% of the impact.
 - **The Rule of Three**: Limit lists of recommendations, risks, or phases to 3 (±1) items to avoid cognitive fatigue.
 - **Eisenhower Matrix**: Categorize tasks by urgency and importance, focusing energy on Quadrant 1 and ignoring Quadrant 4.
-- *Refer to [references/step-4-mece.md](references/step-4-mece.md) for details.*
+- *Refer to [references/step-4-horizontal-structure.md](references/step-4-horizontal-structure.md) for details.*
 
 ### Step 5: Visualize Relationships (Diagram Matching, Kepner-Tregoe Matrix)
 Enhance comprehension with structural layouts:

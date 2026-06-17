@@ -1,6 +1,6 @@
 ---
 name: structured-thinking
-description: "Use when organizing complex information for an audience: writing incident reports, postmortems, executive summaries, design documents, proposals, or presentation outlines. Triggered when there is a risk of presenting unstructured, raw, or chronological logs and details to executives, stakeholders, or teams."
+description: "Use when organizing complex information for an audience: writing incident reports, postmortems, executive summaries, design documents, proposals, or presentation outlines. Triggered when there is a risk of presenting unstructured, raw, or chronological logs and details to executives, stakeholders, or teams. / 当需要向受众组织复杂信息时使用：编写故障报告、事后总结（Postmortem）、执行摘要、设计文档、提案或演示大纲。当有可能向管理层、利益相关者或团队展示无结构、原始或按时间顺序排列的日志和细节时触发。"
 ---
 
 # Structured Thinking
@@ -35,14 +35,21 @@ Structured thinking is a communication method that organizes scattered informati
 
 ## Quick Reference
 
+### The 5-Step Methodology
+
 | Step | Objective | Key Framework | Reference File |
 | :--- | :--- | :--- | :--- |
-| **1. Describe Problem** | Find root cause, not blame | 5W2H + 5-Why + Cynefin + System Dynamics | [step-1-5w2h.md](file:///Users/wifibaby4u/LLM/structured-thinking/references/step-1-5w2h.md) |
-| **2. Goal & Audience** | Define target behavior | A→B + SCQA + STAR + SMART + Pre-Mortem + Golden Circle + Feynman + Fogg (B=MAP) | [step-2-scqa.md](file:///Users/wifibaby4u/LLM/structured-thinking/references/step-2-scqa.md) |
-| **3. Vertical Structure** | State conclusion first | Pyramid Principle + First Principles + Occam's Razor + Inductive Logic | [step-3-pyramid.md](file:///Users/wifibaby4u/LLM/structured-thinking/references/step-3-pyramid.md) |
-| **4. Horizontal Structure**| Logical categorization | MECE + MoSCoW/Kano + DDD/Conway/Language + Pareto + Rule of 3 + Eisenhower | [step-4-mece.md](file:///Users/wifibaby4u/LLM/structured-thinking/references/step-4-mece.md) |
-| **5. Visualization** | Speed up comprehension | Diagrams/Tables + KT Matrix | [step-5-visualize.md](file:///Users/wifibaby4u/LLM/structured-thinking/references/step-5-visualize.md) |
-| **Agent Workflow** | Pre-compute and layout | Response Template + OODA Loop | [agent-workflow.md](file:///Users/wifibaby4u/LLM/structured-thinking/references/agent-workflow.md) |
+| **1. Describe Problem** | Find root cause, not blame | 5W2H + 5-Why + Cynefin + System Dynamics | [references/step-1-problem-diagnosis.md](references/step-1-problem-diagnosis.md) |
+| **2. Goal & Audience** | Define target behavior | A→B + SCQA + STAR + SMART + Pre-Mortem + Golden Circle + Feynman + Fogg (B=MAP) | [references/step-2-goal-audience.md](references/step-2-goal-audience.md) |
+| **3. Vertical Structure** | State conclusion first | Pyramid Principle + First Principles + Occam's Razor + Inductive Logic | [references/step-3-vertical-structure.md](references/step-3-vertical-structure.md) |
+| **4. Horizontal Structure**| Logical categorization | MECE + MoSCoW/Kano + DDD/Conway/Language + Pareto + Rule of 3 + Eisenhower | [references/step-4-horizontal-structure.md](references/step-4-horizontal-structure.md) |
+| **5. Visualization** | Speed up comprehension | Diagrams/Tables + KT Matrix | [references/step-5-visualize.md](references/step-5-visualize.md) |
+
+### Operational Layer (Execution Framework)
+
+| Layer | Objective | Key Framework | Reference File |
+| :--- | :--- | :--- | :--- |
+| **Agent Workflow** | Pre-compute and layout | Response Template + OODA Loop | [references/agent-workflow.md](references/agent-workflow.md) |
 
 ## Red Flags — STOP and Rethink
 - Emitting raw timelines or raw server logs without a top-level summary.
@@ -57,3 +64,14 @@ Structured thinking is a communication method that organizes scattered informati
 | "The user requested a raw list / timeline, so I should just give them that." | Give them the timeline, but always prefix it with a 1-2 sentence core conclusion/impact summary first. |
 | "I'm in a rush / exhausted, I don't have time to pre-compute SCQA or Pyramid." | Pre-computing takes 30 seconds in thoughts and saves paragraphs of writing and correction. |
 | "The problem is too simple for structured thinking." | Simple problems benefit the most from a single, clear recommendation upfront. |
+
+## Self-Verification Checklist
+Before sending your response, ask yourself:
+1. [ ] **Executive Summary**: Did I prefix the response with a 1-2 sentence core conclusion/impact summary?
+2. [ ] **Actionable (A→B)**: Have I identified the target Actor and made the Expected Behavior explicitly clear?
+3. [ ] **SCQA Hook**: Does the opening orient the reader using Scenario, Complication, Question, and Answer (or ASCQ/QSCA reordering)?
+4. [ ] **Pyramid & Grouping**: Are supporting points grouped into 3 (±1) logical buckets, and are the headers conclusion-first?
+5. [ ] **MECE Check**: Are the horizontal categories mutually exclusive (no overlap) and collectively exhaustive (no gaps)?
+6. [ ] **Plain Language**: Did I translate technical jargon into simple analogies (Feynman Technique) where appropriate?
+7. [ ] **No Guessing (Cynefin)**: For complex issues, did I outline a probe (e.g., reproduction/telemetry) instead of jumping to a solution?
+8. [ ] **Save Point (OODA)**: During debugging, have I committed/restored intermediate steps to avoid stacked unverified changes?

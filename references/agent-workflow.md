@@ -79,11 +79,21 @@ Notice the order: **question → assumed state → reality → fix**. This is **
 
 When actively running commands, diagnosing compiler/test failures, or investigating codebase behavior, do not guess or apply changes randomly. Execute using the **OODA Loop** to establish a rapid, systematic feedback cycle:
 
-```
-    +-----------------------------------------+
-    |                                         |
-    v                                         |
-[ OBSERVE ] ---> [ ORIENT ] ---> [ DECIDE ] ---> [ ACT ]
+> [!NOTE]
+> **Cynefin vs. OODA Loop**: Cynefin is used to judge which domain a problem belongs to (pre-decision diagnostic classification), whereas the OODA Loop is the operational mechanism used to execute debugging loops (post-decision active execution). They complement each other: once Cynefin classifies a problem as *Complex* requiring a *Probe*, the OODA Loop is the engine used to run that probe cycle.
+
+```mermaid
+flowchart LR
+    Observe["[ OBSERVE ]<br>Inspect error logs, traces, warnings"]
+    Orient["[ ORIENT ]<br>Map to mental model, config, git history"]
+    Decide["[ DECIDE ]<br>Formulate single testable hypothesis"]
+    Act["[ ACT ]<br>Execute fix or run target command"]
+    
+    Observe --> Orient --> Decide --> Act
+    Act -->|Feedback Loop| Observe
+    
+    style Observe fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    style Act fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
 ```
 
 1. **Observe (观察)** — Inspect the raw output of commands, compiler warnings, stack traces, and test logs. Focus on the exact lines and error codes. Do not skip warnings.
@@ -93,4 +103,8 @@ When actively running commands, diagnosing compiler/test failures, or investigat
 
 ### The Save Point + OODA Rule:
 Keep the OODA cycle fast. If an **Act** fails to resolve the issue or introduces new errors, **revert the change instantly** (using git reset/restore) and run the loop again from the last known save point. Never accumulate stacked, unverified changes during debugging.
+
+## Related
+- **Cynefin Complexity Classification**: See [step-1-problem-diagnosis.md](step-1-problem-diagnosis.md#cynefin-framework-classifying-problem-complexity) to classify the problem domain before launching your debugging loop.
+- **SCQA Hook Reordering**: See [step-2-goal-audience.md](step-2-goal-audience.md#scqa-principle) for details on reordering your final output sequence.
 

@@ -49,7 +49,7 @@ Before executing root-cause analysis (5-Why), categorize the problem using the *
 | :--- | :--- | :--- | :--- |
 | **Clear** | Well-known, obvious bug (e.g., syntax error). | **Sense $\rightarrow$ Categorize $\rightarrow$ Respond** | Apply standard best practices immediately. Do not over-analyze. |
 | **Complicated** | Technical issue requiring analysis (e.g., query tuning). | **Sense $\rightarrow$ Analyze $\rightarrow$ Respond** | Perform analysis, compare options (e.g., KT Matrix), and implement the optimal solution. |
-| **Complex** | Emergent/unpredictable behavior (e.g., race conditions, memory leaks). | **Probe $\rightarrow$ Sense $\rightarrow$ Respond** | **Do not guess.** You cannot solve by static analysis. Propose a *probe* first (e.g., add telemetry logs, run profilers, write repro script) to gather data before drawing conclusions. |
+| **Complex** | Emergent/unpredictable behavior (e.g., race conditions, memory leaks). | **Probe $\rightarrow$ Sense $\rightarrow$ Respond** | **Do not guess.** You cannot solve by static analysis. Propose a *probe* first (e.g., add telemetry logs, run profilers, write repro script). Executing the active probe is guided by the OODA Loop (see [agent-workflow.md](agent-workflow.md#operational-execution-debugging-with-the-ooda-loop)). |
 | **Chaotic** | Emergency outage, data corruption. | **Act $\rightarrow$ Sense $\rightarrow$ Respond** | **Stop the bleeding first.** Take immediate action (rollback, rate-limit, revert config) to stabilize the system, then analyze. |
 
 ## System Dynamics: Non-Linear Root-Cause Analysis
@@ -60,5 +60,9 @@ While **5-Why** analyzes linear cause-effect chains, it fails for complex softwa
   * **Mitigation**: Do not apply naive linear fixes (like "increase query timeout," which keeps connections held longer). **Break the loop** (e.g., implement circuit breakers, rate limits, or exponential backoff with jitter).
 * **Negative Balancing Loop (负反馈/调节回路)** — A self-stabilizing cycle (e.g., *CPU load spikes $\rightarrow$ auto-scaler triggers $\rightarrow$ pod count increases $\rightarrow$ load per pod drops*).
   * **Goal**: Maximize balancing loops to ensure system resilience.
+
+## Related
+- **OODA Loops**: See [agent-workflow.md](agent-workflow.md#operational-execution-debugging-with-the-ooda-loop) for how to run iterative OODA debugging loops once the problem domain is diagnosed.
+- **Visualizing Root Causes**: See [step-5-visualize.md](step-5-visualize.md#mermaid-template-cause-and-effect-tree-fishbone-variant) to map out diagnosed causes using the Fishbone Mermaid diagram.
 
 

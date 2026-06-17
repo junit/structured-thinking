@@ -4,12 +4,26 @@
 
 Start with your **main conclusion**, then **supporting conclusions**, then **evidence**. Each layer elaborates on the layer above. Audiences grasp the central idea first, then decide how deep to drill.
 
-```
-        [Main Conclusion]
-           /     |     \
-    [Support] [Support] [Support]
-      /  \      |        /  \
-   [E]  [E]   [E]     [E]  [E]
+```mermaid
+graph TD
+    Main["Main Conclusion / Recommendation"]
+    
+    Support1["Supporting Conclusion A"]
+    Support2["Supporting Conclusion B"]
+    Support3["Supporting Conclusion C"]
+    
+    E1["Evidence/Fact A.1"]
+    E2["Evidence/Fact A.2"]
+    E3["Evidence/Fact B.1"]
+    E4["Evidence/Fact C.1"]
+    E5["Evidence/Fact C.2"]
+    
+    Main --> Support1 & Support2 & Support3
+    Support1 --> E1 & E2
+    Support2 --> E3
+    Support3 --> E4 & E5
+    
+    style Main fill:#e1f5fe,stroke:#01579b,stroke-width:2px
 ```
 
 ## Four Rules
@@ -82,6 +96,10 @@ To maximize reading speed and comprehension, structure your arguments using **In
 | :--- | :--- | :--- |
 | **Deductive** (Anti-pattern) | Premise 1 $\rightarrow$ Premise 2 $\rightarrow$ Conclusion | "React requires immutable state. Our reducer directly mutates state objects. Therefore, the UI components fail to trigger re-renders." |
 | **Inductive** (Preferred) | **Conclusion** $\rightarrow$ Supporting Fact 1 + 2 + 3 | "**The UI fails to re-render because of direct state mutation in the reducer.**<br>• The reducer bypasses immutable updates.<br>• React fails to detect state references changes.<br>• Component tree bypasses render lifecycle." |
+
+## Related
+- **Horizontal MECE Classification**: See [step-4-horizontal-structure.md](step-4-horizontal-structure.md) for how to ensure that each tier in your vertical pyramid has no overlapping arguments (Mutually Exclusive) and covers the full scope of details (Collectively Exhaustive).
+- **Executive Summaries**: See [agent-workflow.md](agent-workflow.md#phase-2-response-template) for how to place the top of the pyramid (your main conclusion) into the final response template.
 
 
 
