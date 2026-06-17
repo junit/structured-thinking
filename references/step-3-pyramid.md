@@ -69,4 +69,19 @@ Apply this to prune complexity from your design pyramid:
 | :--- | :--- |
 | **Conclusion**: Add user billing support.<br>**Support**: Set up a payment microservice, deploy Kafka for event streaming, spin up DynamoDB for ledger records. | **Conclusion**: Add user billing support.<br>**Support**: Integrate Stripe SDK into the existing API, save transactions to the primary database using transactional checks. |
 
+## Inductive vs. Deductive Reasoning: Choose Inductive
+
+To maximize reading speed and comprehension, structure your arguments using **Inductive Reasoning** rather than **Deductive Reasoning**:
+
+* **Deductive Reasoning (演绎推理)** — Builds a logical chain of premises that leads to a conclusion (e.g., "A is true, B is true, therefore C must be done"). This forces the reader to follow your entire train of thought before getting the point. Avoid this in final reports.
+* **Inductive Reasoning (归纳推理)** — Starts with the conclusion, then groups similar facts or observations that support it (e.g., "We must do C because of 1, 2, and 3").
+
+### Comparison in Technical Writing:
+
+| Reasoning Type | Structure | Example (Bug Diagnostic) |
+| :--- | :--- | :--- |
+| **Deductive** (Anti-pattern) | Premise 1 $\rightarrow$ Premise 2 $\rightarrow$ Conclusion | "React requires immutable state. Our reducer directly mutates state objects. Therefore, the UI components fail to trigger re-renders." |
+| **Inductive** (Preferred) | **Conclusion** $\rightarrow$ Supporting Fact 1 + 2 + 3 | "**The UI fails to re-render because of direct state mutation in the reducer.**<br>• The reducer bypasses immutable updates.<br>• React fails to detect state references changes.<br>• Component tree bypasses render lifecycle." |
+
+
 

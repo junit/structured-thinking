@@ -74,3 +74,23 @@ the other's items vanish. 4 occurrences this quarter; 1 lost order worth ¥18k.
 ```
 
 Notice the order: **question → assumed state → reality → fix**. This is **QSCA** — the audience (a product manager who dismissed earlier incidents as "one-off bugs") needs the question framed and the gap exposed before approving a 3-week repair. Contrast with Example 1 (ASCQ), where the engineering lead wanted the answer up front. The A→B rule drives the ordering: same frameworks, different Actor, different sequence.
+
+## Operational Execution: Debugging with the OODA Loop
+
+When actively running commands, diagnosing compiler/test failures, or investigating codebase behavior, do not guess or apply changes randomly. Execute using the **OODA Loop** to establish a rapid, systematic feedback cycle:
+
+```
+    +-----------------------------------------+
+    |                                         |
+    v                                         |
+[ OBSERVE ] ---> [ ORIENT ] ---> [ DECIDE ] ---> [ ACT ]
+```
+
+1. **Observe (观察)** — Inspect the raw output of commands, compiler warnings, stack traces, and test logs. Focus on the exact lines and error codes. Do not skip warnings.
+2. **Orient (定位)** — Map the observations to your mental model of the system. Cross-reference configuration files, package dependencies, and recent git history to understand why the issue occurred.
+3. **Decide (决策)** — Formulate a single, testable hypothesis (e.g., "The package dependency is missing because of an incorrect peer dependency version"). Decide on the *single* next action that will test this hypothesis. Avoid multi-variable changes.
+4. **Act (行动)** — Execute the decision (e.g., install peer dependency, modify code, run test).
+
+### The Save Point + OODA Rule:
+Keep the OODA cycle fast. If an **Act** fails to resolve the issue or introduces new errors, **revert the change instantly** (using git reset/restore) and run the loop again from the last known save point. Never accumulate stacked, unverified changes during debugging.
+
