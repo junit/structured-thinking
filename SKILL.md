@@ -1,77 +1,93 @@
 ---
 name: structured-thinking
-description: "Use when organizing complex information for an audience: writing incident reports, postmortems, executive summaries, design documents, proposals, or presentation outlines. Triggered when there is a risk of presenting unstructured, raw, or chronological details."
+description: "Use whenever you are about to present complex information to a user — incident reports, postmortems, design reviews, refactoring proposals, debugging summaries, PR descriptions, status updates, technical recommendations, or any response where you might dump raw logs, timelines, or unstructured narrative. Trigger proactively on phrases like 'write a report', 'summarize', 'propose', 'review this design', 'what should we do about', 'help me decide', or whenever a response could otherwise become a wall of text. Even short answers benefit when the user needs to make a decision."
 ---
 
 # Structured Thinking
 
-## Overview
-Structured thinking is a communication method that organizes scattered information into a high-impact, audience-focused structure. It ensures recommendations are delivered first, supporting details are logically grouped, and actions are clear.
+A communication discipline that forces conclusions to the top, supports them with logically grouped evidence, and ends with an explicit ask. The goal is not "more structured" — it is to make the audience's next decision obvious.
 
-## When to Use
+## When NOT to Use
 
-### Symptoms / Triggers
-- You are about to present raw chronological lists of events or raw server logs to a stakeholder.
-- You are drafting a postmortem, report, design document, proposal, or presentation outline.
-- The audience needs to make a decision, approve a plan, or understand a root cause quickly.
-- You feel tempted to write a "wall of text" or tell a narrative story instead of showing structure.
+- Live debugging where you are actively running shell commands (use debugging skills).
+- Writing source code, config, or commit messages.
+- One-line factual answers ("yes", "use `npm ci`").
+- Casual conversation.
 
-### When NOT to Use
-- Live debugging sessions where you are actively running terminal commands to fix errors (use debugging skills instead).
-- Writing raw source code files or configuration changes.
+## Step 0: Complexity Triage (read this first)
 
-## Core Pattern
+Before opening any reference file, classify the task:
 
-### Before (Chronological Storytelling)
-> We deployed a change at 13:55. At 14:00, checkouts started failing. The database connection pool was exhausted. The DBA restarted the DB at 14:15 but it didn't help. At 14:30 we correlated the deploy. At 14:45 we found the connection leak bug. At 15:00 we rolled back. At 15:30 it recovered.
+| Tier | Signals | Action |
+| :--- | :--- | :--- |
+| **Trivial** (1-2 sentence answer) | User asks a single yes/no or lookup question. | Stop. Answer directly. Do not read references. |
+| **Moderate** (one short structured response) | Summary, status update, simple recommendation. | Use only the **Three Core Patterns** below. Skip references. |
+| **Complex** (full report, design doc, postmortem, multi-option decision) | Multiple findings, options, or stakeholders; raw logs/timeline involved. | Use Core Patterns + open the relevant `references/` file. |
 
-### After (Structured & Audience-Focused)
-> **Summary**: The checkout service was restored at 15:30 by reverting a connection leak bug introduced in a rollback deploy at 13:55 (total downtime: 2 hours, impact: $200k loss). We are implementing ESLint rules to prevent future leaks.
->
-> **Timeline**:
-> 1. **Rollback Deploy** (13:55) - Bug introduced (missing `finally` block).
-> 2. **DB Restart** (14:15) - Temporary fix attempted; connections immediately re-exhausted.
-> 3. **Code Reverted** (15:00-15:30) - Full service recovery.
+The triage exists because reading every reference costs ~30 seconds of latency. Spend it only when the response genuinely needs depth.
 
-## Quick Reference
+## The Three Core Patterns (apply to every Moderate and Complex response)
 
-### The 5-Step Methodology
+These are the patterns that separate a structured response from a default LLM response. Use all three on every non-trivial answer.
 
-| Step | Objective | Key Framework | Reference File |
-| :--- | :--- | :--- | :--- |
-| **1. Describe Problem** | Find root cause, not blame | 5W2H + 5-Why + Cynefin + System Dynamics | [references/step-1-problem-diagnosis.md](references/step-1-problem-diagnosis.md) |
-| **2. Goal & Audience** | Define target behavior | A→B + SCQA + STAR + SMART + Pre-Mortem + Golden Circle + Feynman + Fogg (B=MAP) | [references/step-2-goal-audience.md](references/step-2-goal-audience.md) |
-| **3. Vertical Structure** | State conclusion first | Pyramid Principle + First Principles + Occam's Razor + Inductive Logic | [references/step-3-vertical-structure.md](references/step-3-vertical-structure.md) |
-| **4. Horizontal Structure**| Logical categorization | MECE + MoSCoW/Kano + DDD/Conway/Language + Pareto + Rule of 3 + Eisenhower | [references/step-4-horizontal-structure.md](references/step-4-horizontal-structure.md) |
-| **5. Visualization** | Speed up comprehension | Diagrams/Tables + KT Matrix | [references/step-5-visualize.md](references/step-5-visualize.md) |
+### Pattern 1: Conclusion at the Top
 
-### Operational Layer (Execution Framework)
+Open with 1-2 sentences that contain the **decision, impact, or recommendation** — not background.
 
-| Layer | Objective | Key Framework | Reference File |
-| :--- | :--- | :--- | :--- |
-| **Agent Workflow** | Pre-compute and layout | Response Template + OODA Loop | [references/agent-workflow.md](references/agent-workflow.md) |
+**Bad**: "At 13:00, an alert fired. At 13:05, we checked CPU. At 13:10, we hypothesized..."
+
+**Good**: "Service was restored at 13:35 by blocking a scraper IP range in Cloudflare after a 35-minute latency spike. The durable fix is per-IP rate limiting; need your sign-off for ~1 engineer-week."
+
+If you cannot write the first sentence as a self-contained conclusion, you do not yet understand the problem — go back and figure it out.
+
+### Pattern 2: Group Evidence into 3 (±1) Buckets
+
+After the conclusion, partition supporting detail into at most 3 buckets. Use headers. The bucket names should be **conclusions in miniature**, not categories.
+
+**Bad headers**: "Details", "Background", "Misc"
+**Good headers**: "Root cause: scraper flood", "Why detection was slow", "Remediation plan"
+
+If a bucket has more than 3 items, ask whether those items are actually 2 buckets mashed together.
+
+### Pattern 3: End with an Explicit Ask
+
+The last section of any Moderate or Complex response tells the audience **what to do next**. Use one of:
+
+- **Decisions Requested** (for reports/proposals): bullet list of approvals/choices needed.
+- **Next Action** (for debugging): the one command to run next.
+- **Open Questions** (for design docs): what's still unknown.
+
+A response without an explicit ask is informational noise. The audience has to invent the action — which is exactly what structured communication is meant to prevent.
+
+## When to Go Deeper (Complex tier only)
+
+Open these reference files when the situation matches:
+
+| If the task involves... | Read this | High-value method you'll find |
+| :--- | :--- | :--- |
+| **Root cause / incident** with unclear causation | `references/step-1-problem-diagnosis.md` | **Cynefin** (probe before guessing for Complex), **5-Why** (push to process failure), **Fishbone** (MECE cause tree) |
+| **A decision between 2+ options** | `references/step-3-vertical-structure.md` | **First Principles** (root in fundamentals, not analogy), **Occam's Razor** (prune over-engineering), **Kepner-Tregoe Matrix** (MUSTs + weighted WANTs + P×S risk) |
+| **Multiple causes / hypotheses to rank** | `references/step-4-horizontal-structure.md` | **MECE** (no overlap, no gaps), **Pareto** (vital few), **Rule of 3** (cognitive chunking) |
+| **Active debugging loop** | `references/agent-workflow.md` | **OODA Loop**, **Save Point + Revert Rule** (one hypothesis per cycle, never stack unverified changes) |
+| **Audience-tailored structure** (ASCQ vs QSCA) | `references/step-2-goal-audience.md` | **A→B** (define Actor + expected Behavior), **SCQA** ordering, **Fogg B=MAP** (for actionable guides) |
+
+You do not need to read all five. Pick the one matching the task. The references contain the discipline the model does not have by default.
 
 ## Red Flags — STOP and Rethink
-- Emitting raw timelines or raw server logs without a top-level summary.
-- Saying: "First, let's look at the history of the issue..."
-- Mixing chronological order and priority order in a single list.
-- Writing paragraphs that do not directly help the Actor take the target Behavior.
 
-## Rationalization Table
-
-| Excuse | Reality |
-| :--- | :--- |
-| "The user requested a raw list / timeline, so I should just give them that." | Give them the timeline, but always prefix it with a 1-2 sentence core conclusion/impact summary first. |
-| "I'm in a rush / exhausted, I don't have time to pre-compute SCQA or Pyramid." | Pre-computing takes 30 seconds in thoughts and saves paragraphs of writing and correction. |
-| "The problem is too simple for structured thinking." | Simple problems benefit the most from a single, clear recommendation upfront. |
+- The response opens with "First, let me explain the history..." or a raw timestamp.
+- A list mixes chronological order and priority order.
+- The response has no explicit ask or next action.
+- Paragraphs of narrative that don't help the audience make a decision.
+- Multiple options presented without a scoring matrix or recommendation.
 
 ## Self-Verification Checklist
-Before sending your response, ask yourself:
-1. [ ] **Executive Summary**: Did I prefix the response with a 1-2 sentence core conclusion/impact summary?
-2. [ ] **Actionable (A→B)**: Have I identified the target Actor and made the Expected Behavior explicitly clear?
-3. [ ] **SCQA Hook**: Does the opening orient the reader using Scenario, Complication, Question, and Answer (or ASCQ/QSCA reordering)?
-4. [ ] **Pyramid & Grouping**: Are supporting points grouped into 3 (±1) logical buckets, and are the headers conclusion-first?
-5. [ ] **MECE Check**: Are the horizontal categories mutually exclusive (no overlap) and collectively exhaustive (no gaps)?
-6. [ ] **Plain Language**: Did I translate technical jargon into simple analogies (Feynman Technique) where appropriate?
-7. [ ] **No Guessing (Cynefin)**: For complex issues, did I outline a probe (e.g., reproduction/telemetry) instead of jumping to a solution?
-8. [ ] **Save Point (OODA)**: During debugging, have I committed/restored intermediate steps to avoid stacked unverified changes?
+
+Before sending:
+
+1. [ ] **Conclusion at top**: First sentence is a self-contained decision/impact/recommendation.
+2. [ ] **3 (±1) buckets**: Evidence grouped under conclusion-style headers.
+3. [ ] **Explicit ask**: Last section tells the audience what to do.
+4. [ ] **No raw dumps**: Raw logs/timelines are synthesized, not copy-pasted.
+5. [ ] **No over-engineering**: Simplest solution presented first (Occam).
+6. [ ] **Debugging discipline**: One hypothesis per cycle; revert path stated if it fails.

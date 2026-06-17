@@ -130,14 +130,16 @@ This repository is designed to be directly readable by AI agents (e.g., Claude C
 Copy the contents of `SKILL.md` to your system prompt or custom instructions configuration. The agent will automatically apply structured thinking and use the **OODA Loop** (Observe, Orient, Decide, Act) to govern terminal debugging and task execution.
 
 ### Integrating with Cursor / Windsurf / VS Code
-Create or append to your `.cursorrules` or `.windsurfrules` file at the root of your workspace:
+Create or append to your `.cursorrules` (Cursor), `.windsurfrules` (Windsurf), or `.github/copilot-instructions.md` (GitHub Copilot) file at the root of your workspace. These files are plain-text instruction files, not JSON:
 
-```json
-{
-  "rules": [
-    "When explaining complex bug fixes, architectural proposals, or design patterns, follow the structured thinking principles defined in SKILL.md. Always present conclusions and recommendations at the very beginning."
-  ]
-}
+```text
+Follow the structured-thinking principles from SKILL.md when writing bug reports,
+postmortems, refactoring proposals, design docs, or any response where the user
+needs to make a decision. Specifically:
+- Open with a 1-2 sentence conclusion (decision/impact/recommendation).
+- Group evidence into 3 (+/-1) buckets with conclusion-style headers.
+- End with an explicit ask (Decisions Requested / Next Action / Open Questions).
+- For active debugging, use the OODA loop with one hypothesis per cycle.
 ```
 
 ### Integrating with LangChain / Custom Agents

@@ -1,110 +1,78 @@
-# Applying the Skill as an Agent
+# Active Debugging: OODA Loop + Save Point
 
-When executing a task that requires structured thinking or presenting complex information to the user, follow this two-phase process.
+Open this file when **actively running commands to fix a failing test, broken build, or production issue**. This is the operational execution layer — Step 1 (Cynefin) tells you *what kind* of problem it is; this file tells you *how to run the loop*.
 
-## Phase 1: Pre-computation (Mental Draft)
+## The Save Point Rule (read first)
 
-Before generating the final response, outline your thoughts in your `thought` block:
+Before touching anything:
 
-- **A→B Target**: Who is the user (developer, manager, designer)? What decision or action should they make?
-- **SCQA Hook**: What is the context (S), what went wrong (C), what is the core question (Q), and what is my answer (A)?
-- **Pyramid Outline**: Map out the top-level conclusion and the supporting arguments.
-- **Rule of Three / MECE Check**: Limit core items (findings, risks, steps) to 3 (±1) items. Synthesize longer lists into 3 main buckets. Ensure categories are distinct, complete, and ordered logically.
-
-## Phase 2: Response Template
-
-Adopt this structured output layout:
-
-1. **Core Summary (Pyramid Top)** — A 1-2 sentence executive summary or recommendation at the very beginning (limited to 3 key points).
-2. **Context Hook (SCQA)** — A brief intro setting the stage.
-3. **Detailed Structure (Pyramid Body)** — Grouped and ordered sections with clear headings and bullet points. Limit main sections or lists to 3 (±1) items. Use **bolding** to emphasize key actions.
-4. **Visual Aid (Optional)** — Include a Mermaid diagram or table to illustrate workflows, architectures, or comparisons.
-
-## Example Output Shape
-
-```markdown
-## Recommendation
-
-Migrate to PostgreSQL 16 by Q3 to avoid EOL compliance failure.
-
-## Context
-
-We run PostgreSQL 11 (EOL Nov 2025). Compliance audit on Oct 15 will flag
-unpatched CVEs. Migration takes ~6 weeks; we have ~14 weeks of runway.
-
-## Plan
-
-1. **Snapshot + replica** (week 1-2) — stand up PG16 replica of PG11 primary
-2. **Shadow traffic** (week 3-4) — dual-write from app, compare row counts
-3. **Cutover** (week 5) — promote replica, keep PG11 read-only for rollback
-4. **Decommission** (week 6) — drop PG11 after 1 week clean operation
-
-## Risks
-
-| Risk                  | Mitigation                              |
-| --------------------- | --------------------------------------- |
-| Extension incompatibility | Audit `pg_stat_user_functions` first  |
-| Replication lag spike  | Alert if lag > 1s during shadow traffic |
+```bash
+git status                            # must be clean
+git log -1 --format='%H %s'           # record HEAD
+git tag debug-baseline-$(date +%s)    # movable reference for one-command reset
 ```
 
-Notice the order: conclusion → context → plan → risks. This is **ASCQ** ordering — answer first, because the audience (likely an engineering lead) wants the decision before the justification.
+**Hard rule**: every change starts from this save point. If the change fails, you `git reset --hard debug-baseline-*` before trying the next thing. **Never stack unverified changes** — you lose the ability to tell which change broke (or fixed) what.
 
-## Example 2: Incident Repair Plan (QSCA — Problem First)
-
-```markdown
-## The Question
-
-Why are we losing order items in production, and how do we stop it permanently?
-
-## What We Assumed
-
-Our cart-to-order pipeline was atomic — one INSERT, one order.
-
-## What's Actually Happening
-
-Under concurrent checkout, `INSERT ... SELECT` runs without a transaction.
-Two sessions read the same cart snapshot and both insert — one silently wins,
-the other's items vanish. 4 occurrences this quarter; 1 lost order worth ¥18k.
-
-## The Fix
-
-1. **Wrap in transaction** (week 1) — `BEGIN ... SELECT FOR UPDATE ... INSERT ... COMMIT`
-2. **Add idempotency key** (week 2) — client sends UUID; reject duplicates
-3. **Reconcile missing orders** (week 3) — backfill from payment records
-```
-
-Notice the order: **question → assumed state → reality → fix**. This is **QSCA** — the audience (a product manager who dismissed earlier incidents as "one-off bugs") needs the question framed and the gap exposed before approving a 3-week repair. Contrast with Example 1 (ASCQ), where the engineering lead wanted the answer up front. The A→B rule drives the ordering: same frameworks, different Actor, different sequence.
-
-## Operational Execution: Debugging with the OODA Loop
-
-When actively running commands, diagnosing compiler/test failures, or investigating codebase behavior, do not guess or apply changes randomly. Execute using the **OODA Loop** to establish a rapid, systematic feedback cycle:
-
-> [!NOTE]
-> **Cynefin vs. OODA Loop**: Cynefin is used to judge which domain a problem belongs to (pre-decision diagnostic classification), whereas the OODA Loop is the operational mechanism used to execute debugging loops (post-decision active execution). They complement each other: once Cynefin classifies a problem as *Complex* requiring a *Probe*, the OODA Loop is the engine used to run that probe cycle.
+## OODA Loop
 
 ```mermaid
 flowchart LR
-    Observe["[ OBSERVE ]<br>Inspect error logs, traces, warnings"]
-    Orient["[ ORIENT ]<br>Map to mental model, config, git history"]
-    Decide["[ DECIDE ]<br>Formulate single testable hypothesis"]
-    Act["[ ACT ]<br>Execute fix or run target command"]
-    
+    Observe["[ OBSERVE ]<br/>Read raw output: error msg,<br/>stack trace, test log"]
+    Orient["[ ORIENT ]<br/>Map to mental model:<br/>config, git history, deps"]
+    Decide["[ DECIDE ]<br/>One testable hypothesis.<br/>One next action."]
+    Act["[ ACT ]<br/>Run the command.<br/>Capture output."]
     Observe --> Orient --> Decide --> Act
     Act -->|Feedback Loop| Observe
-    
-    style Observe fill:#fff3e0,stroke:#e65100,stroke-width:2px
-    style Act fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
 ```
 
-1. **Observe (观察)** — Inspect the raw output of commands, compiler warnings, stack traces, and test logs. Focus on the exact lines and error codes. Do not skip warnings.
-2. **Orient (定位)** — Map the observations to your mental model of the system. Cross-reference configuration files, package dependencies, and recent git history to understand why the issue occurred.
-3. **Decide (决策)** — Formulate a single, testable hypothesis (e.g., "The package dependency is missing because of an incorrect peer dependency version"). Decide on the *single* next action that will test this hypothesis. Avoid multi-variable changes.
-4. **Act (行动)** — Execute the decision (e.g., install peer dependency, modify code, run test).
+### OBSERVE — read the raw signal, no interpretation
 
-### The Save Point + OODA Rule:
-Keep the OODA cycle fast. If an **Act** fails to resolve the issue or introduces new errors, **revert the change instantly** (using git reset/restore) and run the loop again from the last known save point. Never accumulate stacked, unverified changes during debugging.
+- Read the **full** stack trace, not just the headline error.
+- Note the calling test name, the line number, the preceding frames.
+- Don't skip warnings. They're often the actual clue.
 
-## Related
-- **Cynefin Complexity Classification**: See [step-1-problem-diagnosis.md](step-1-problem-diagnosis.md#cynefin-framework-classifying-problem-complexity) to classify the problem domain before launching your debugging loop.
-- **SCQA Hook Reordering**: See [step-2-goal-audience.md](step-2-goal-audience.md#scqa-principle) for details on reordering your final output sequence.
+### ORIENT — map observation to system model
 
+Cross-reference in parallel:
+- **Git history**: what changed recently? `git log -p -- <file>` and `git diff <green>..<red>`.
+- **Call graph**: who calls this function? what data does it pass?
+- **Contract**: if the failing line consumes an API or DB result, check the actual current shape vs. what the code expects.
+
+### DECIDE — one hypothesis, one action
+
+Form a single, falsifiable statement:
+
+> "Line 42 calls `.map` on `X`. `X` is `undefined` because the mock fixture at `tests/mocks/users.ts` omits the `permissions` array. Probe: `console.log(typeof X, Object.keys(X || {}))` before line 42."
+
+**Refuse these anti-patterns**:
+- "Let me add `?.map` and also rewrite the function and also fix the mock" — multi-variable change, poisons the loop.
+- "Let me push to CI to see what happens" — slow, non-deterministic, burns shared pipeline.
+
+### ACT — execute, capture, decide
+
+Run **one** change. Capture the result. Compare against the hypothesis. Three outcomes:
+
+| Observation | Next move |
+| :--- | :--- |
+| Hypothesis confirmed (probe shows `X` is genuinely `undefined`) | Revert the probe. Apply the real fix at the source. |
+| Hypothesis wrong (probe shows a valid array) | `git stash pop` / `git reset --hard debug-baseline-*`. Pick the next MECE hypothesis. |
+| New error appears (different stack) | **Revert immediately.** Do not chain fixes. Re-run loop. |
+
+## Hard Rules During the Loop
+
+1. **One change per cycle.** If you need 3 fixes, you don't understand the bug yet — go back to OBSERVE.
+2. **Revert between attempts.** Never carry probe code into the real fix commit.
+3. **Reproduce locally before pushing to CI.** CI is for verification, not exploration.
+4. **Don't declare victory on a green targeted test alone.** Run the full suite + type check.
+
+## Verification Layer (only after the fix is applied)
+
+1. **Targeted test** — the originally failing test goes green.
+2. **Full suite** — no previously-passing test breaks.
+3. **Type check** — `tsc --noEmit` or equivalent; catches contract regressions cheaply.
+4. **CI green on the PR** — the only signal that actually counts.
+
+## See also
+- Pre-diagnosis (Cynefin classification): `step-1-problem-diagnosis.md`.
+- Hypothesis bucketing (MECE before picking one): `step-4-horizontal-structure.md`.

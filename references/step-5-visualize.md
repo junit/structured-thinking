@@ -1,104 +1,40 @@
-# Step 5: Visualize Relationships
+# Step 5: Visualize (Diagram Matching + KT Matrix)
 
-## When to Visualize
-
-After structuring information vertically (pyramid) and horizontally (MECE), translate the relationships into diagrams **when prose alone would be slower to grasp**. Skip visualization for trivial relationships.
+Open this file when prose alone would be slower to grasp than a diagram, or when comparing options visually.
 
 ## Match Diagram to Message
 
-Pick the diagram type that matches the relationship you are communicating:
+Pick the diagram type that matches the relationship:
 
-| Relationship            | Diagram type              | Example                                  |
-| ----------------------- | ------------------------- | ---------------------------------------- |
-| Parts of a whole        | Pie chart, treemap        | Budget allocation, market share          |
-| Process / flow          | Flowchart, swimlane       | CI/CD pipeline, approval workflow        |
-| Repeated loop           | Cycle diagram             | PDCA, monthly close, dev loop            |
-| Causal chain            | Causal loop, fishbone     | Incident root cause, feedback system     |
-| Hierarchy               | Tree, org chart, mind map | Org structure, taxonomy, file system     |
-| Comparison              | Bar chart, table          | Feature matrix, before/after             |
-| Relationship / network  | Node-link, graph          | Service dependencies, social graph       |
-
-## Tools
-
-- **Mermaid** (inline in markdown) — preferred for flowcharts, sequence diagrams, Gantt
-- **Tables** — preferred for structured comparisons
-- **External tools** — draw.io, Excalidraw for hand-drawn feel; native chart libraries for data
-
-## Mermaid Template: Cause-and-Effect Tree (Fishbone Variant)
-
-When presenting the root causes of a complex incident (Step 1), use a **horizontal Mermaid tree** to visualize the relationship between the primary disaster (the "fish head") and its contributing categories and sub-causes:
-
-```mermaid
-graph LR
-    Disaster["Disaster: DB CPU at 100%"]
-
-    %% MECE Categories (The Fish Ribs)
-    Infra["Infrastructure"] --> Disaster
-    AppCode["Application Code"] --> Disaster
-    Client["Client Behavior"] --> Disaster
-    Process["Deployment Process"] --> Disaster
-
-    %% Sub-causes (Fine Bones)
-    DiskIO["Slow Disk IOPS"] --> Infra
-    ConnLimit["Low Max Connections"] --> Infra
-
-    NoIndex["Missing Index on orders"] --> AppCode
-    Leak["Connection Leak in middleware"] --> AppCode
-
-    Storm["Retry Storm during spike"] --> Client
-    HeavyQuery["Ad-hoc Analytics query"] --> Client
-
-    NoReview["No schema checklist review"] --> Process
-```
+| Relationship | Diagram type | Example |
+| :--- | :--- | :--- |
+| Parts of a whole | Pie chart, treemap | Budget allocation |
+| Process / flow | Flowchart, swimlane | CI/CD pipeline |
+| Repeated loop | Cycle diagram | PDCA, monthly close |
+| Causal chain | Causal loop, fishbone | Incident root cause |
+| Hierarchy | Tree, org chart, mind map | Taxonomy, file system |
+| Comparison | Bar chart, table | Feature matrix, before/after |
+| Relationship / network | Node-link, graph | Service dependencies |
 
 ## Anti-patterns
 
+- Pie chart with >7 slices (unreadable) — use a bar chart or treemap.
+- Flowchart for a 2-step process — just write the two steps.
+- 3D / gradient / shadow decoration that doesn't encode information.
+- Repeating in prose what the diagram already shows.
 
-- Using a pie chart for >7 slices (unreadable)
-- Using a flowchart for a 2-step process (overkill)
-- Decorating instead of informing (3D pie charts, gradient fills)
-- Repeating in prose what the diagram already shows (redundancy)
+## Tools
 
-## Kepner-Tregoe (KT) Decision Matrix (For Option Comparison)
+- **Mermaid** (inline in markdown) — preferred for flowcharts, sequence diagrams, Gantt, simple trees. Renders in GitHub, most markdown viewers.
+- **Tables** — preferred for structured comparisons, option matrices.
+- **External** — draw.io / Excalidraw for hand-drawn feel; native chart libraries for data plots.
 
-When presenting technical proposals or trade-off decisions between multiple options (e.g., electing to build a custom solution vs. buying a SaaS tool, or choosing between MongoDB and Postgres), use a **Kepner-Tregoe (KT) Decision Matrix** structure. This translates a complex, subjective choice into a clear, logical comparison:
+## KT Matrix Reference
 
-1. **Classify Criteria**: Split your requirements into **MUSTs** (mandatory, binary yes/no) and **WANTS** (desirable features with varying importance).
-2. **Assign Weights**: Rate each **WANT** on a scale of 1–10 (10 being critical, 1 being nice-to-have).
-3. **Score Alternatives**: Score each alternative against the criteria (1–10). Calculate the weighted score (`Weight x Score`).
-4. **Identify Risks**: List potential risks for the top-scoring options, assigning Probability (P) and Severity (S) from 1–10.
+The Kepner-Tregoe decision matrix is detailed in `step-3-vertical-structure.md`. The short version: classify criteria into MUSTs (binary gates) and WANTs (weighted scores), then run a risk assessment (P × S) on the winner.
 
-### Markdown Table Template for KT Analysis:
+Use a KT Matrix **whenever you have 2+ options and the audience needs to see why one was chosen**. The matrix replaces paragraphs of justification with a scannable table.
 
-**Decision: Database Selection for High-Throughput Analytics**
-
-#### 1. Mandatory Criteria (MUSTs)
-
-| Option | MUST: Real-time ingest (>50k RPS) | MUST: SQL compatibility | Status |
-| :--- | :--- | :--- | :--- |
-| **A: Postgres replica** | YES | YES | **GO** |
-| **B: Elasticsearch** | YES | NO (custom DSL) | **NO-GO** |
-| **C: ClickHouse** | YES | YES (ANSI SQL) | **GO** |
-
-#### 2. Desirable Criteria (WANTs)
-
-| Criteria | Weight | ClickHouse Score | ClickHouse Weighted | Postgres Score | Postgres Weighted |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| Low storage cost (compression) | 8 | 9 | **72** | 4 | **32** |
-| Low maintenance overhead | 7 | 5 (new cluster) | **35** | 10 (existing infra)| **70** |
-| Query speed for multi-dim group | 9 | 10 | **90** | 3 | **27** |
-| **Total Score** | - | - | **197** | - | **129** |
-
-#### 3. Risk Assessment (For ClickHouse - High Score Option)
-
-| Threat / Risk | Probability (1-10) | Severity (1-10) | Total Threat (P x S) | Mitigation Plan |
-| :--- | :--- | :--- | :--- | :--- |
-| Team lacks ClickHouse operational knowledge | 7 | 6 | **42** | Purchase Managed ClickHouse (Altinity/ClickHouse Cloud) |
-
-> [!TIP]
-> This risk assessment scoring structure directly quantifies risks brainstormed during your defensive planning. See [Pre-Mortem in Step 2](step-2-goal-audience.md#pre-mortem-mitigating-risks-before-code-execution).
-
-## Related
-- **Pre-Mortem Risk Brainstorming**: See [step-2-goal-audience.md](step-2-goal-audience.md#pre-mortem-mitigating-risks-before-code-execution) to discover potential failure causes before quantifying them in the threat matrix.
-- **Cause-and-Effect Analysis**: See [step-1-problem-diagnosis.md](step-1-problem-diagnosis.md) to explore the system root causes that feed into your diagrams.
-
+## See also
+- KT Matrix full template: `step-3-vertical-structure.md`.
+- Fishbone cause-and-effect diagram: `step-1-problem-diagnosis.md`.

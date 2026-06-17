@@ -1,105 +1,76 @@
-# Step 3: Structure the Information (Pyramid Principle)
+# Step 3: Decision Architecture (First Principles + Occam + KT Matrix)
 
-## Core Idea
+Open this file when the task involves a **decision between 2+ technical options** — design proposals, refactoring plans, build-vs-buy, technology selection.
 
-Start with your **main conclusion**, then **supporting conclusions**, then **evidence**. Each layer elaborates on the layer above. Audiences grasp the central idea first, then decide how deep to drill.
+## First Principles: Argue from Fundamentals, Not Analogy
 
-```mermaid
-graph TD
-    Main["Main Conclusion / Recommendation"]
-    
-    Support1["Supporting Conclusion A"]
-    Support2["Supporting Conclusion B"]
-    Support3["Supporting Conclusion C"]
-    
-    E1["Evidence/Fact A.1"]
-    E2["Evidence/Fact A.2"]
-    E3["Evidence/Fact B.1"]
-    E4["Evidence/Fact C.1"]
-    E5["Evidence/Fact C.2"]
-    
-    Main --> Support1 & Support2 & Support3
-    Support1 --> E1 & E2
-    Support2 --> E3
-    Support3 --> E4 & E5
-    
-    style Main fill:#e1f5fe,stroke:#01579b,stroke-width:2px
-```
+Default LLM behavior is to justify decisions by analogy ("industry standard", "X company does this", "best practice"). This produces weak, context-free arguments. Force arguments to bottom out in **fundamental limits**:
 
-## Four Rules
-
-### 1. Conclusion First
-State your main conclusion or recommendation at the very top. Do not bury it in background.
-
-**Anti-pattern:** "First, let me explain the history..." → audience loses the thread.
-
-### 2. Supporting Layers
-Under the main conclusion, group supporting conclusions that justify it. Beneath each supporting conclusion, provide further sub-conclusions or evidence as needed.
-
-### 3. Audience Perspective
-Organize layers based on what your audience cares about. Audiences often think chronologically, but a hierarchical structure helps them quickly grasp your central idea. Reorder chronological content into thematic layers when it serves comprehension.
-
-### 4. Purpose in Every Conclusion
-Each layer should carry its own **center of gravity** — a purpose or expected result. Without this, points lack "soul" and confuse the audience.
-
-**Test:** Read any box in the pyramid. Can you state its purpose in one sentence? If not, it is a list item, not a conclusion — merge or split it.
-
-## Practical Build Order
-
-1. Write the top-level conclusion first (forced clarity)
-2. Brainstorm all supporting points (divergent)
-3. Group supporting points into 3 (±1) buckets (convergent)
-4. For each bucket, write a one-sentence conclusion that summarizes it
-5. Repeat recursively until evidence level
-6. Read top-down: each parent should follow logically from its children
-7. Read bottom-up: each child should support its parent
-
-## First Principles Reasoning: Strengthening Vertical Justification
-
-When justifying a supporting conclusion or presenting evidence in your pyramid structure, avoid relying on **analogical reasoning** (e.g., "Industry leaders do X" or "We have always done Y"). Instead, use **First Principles Reasoning** to deconstruct the problem to fundamental technical, architectural, or physical facts and build your argument up from there:
-
-| Reasoning Method | Form | Example (Caching Strategy) | Quality |
-| :--- | :--- | :--- | :--- |
-| **By Analogy** | "We should do X because others do X or it's standard convention." | "We should deploy Redis because it's the standard industry caching tier for web applications." | **Low** (Fails to justify specific context/limits) |
-| **By First Principles** | "We should do X because fundamental limits (CPU, memory, networking) dictate it." | "Database disk read latency is 10ms. RAM lookup latency is <1ms. At 15k RPS, DB disk IOPS will be exhausted. Storing queries in-memory avoids disk bottleneck." | **High** (Rigorous, self-evident technical justification) |
-
-### How to Apply in the Pyramid:
-1. **At the Support Layer**: State the conclusion based on functional requirements.
-2. **At the Evidence Layer**: Do not just quote tool names. Root the argument in fundamental computer science principles: network round-trip times (RTT), Big-O time complexity, database locks, thread blocking, memory allocation, or physical system constraints.
-
-## Occam's Razor: Pruning the Design Pyramid
-
-When evaluating multiple architectures, logic patterns, or solutions to a problem, apply **Occam's Razor**: *"Plurality should not be posited without necessity"* (or in software terms: the simplest solution with the fewest moving parts is usually the best).
-
-Apply this to prune complexity from your design pyramid:
-
-* **Reduce Layers**: Do not add abstraction layers (e.g., intermediate interfaces, factories, generic wrappers) unless you have an immediate requirement for polymorphism.
-* **Minimize Entities**: Prefer single-responsibility functions and cohesive modules over introducing new services, microservices, databases, or third-party dependencies.
-* **Keep Explanations Direct**: If 2 facts fully justify a conclusion, do not add 3 speculative justifications to the pyramid. Keep arguments tight.
-
-### Over-Engineered vs. Pruned Design Comparison:
-
-| Over-Engineered Pyramid (Anti-pattern) | Pruned Pyramid (Occam's Razor) |
+| Weak (by analogy) | Strong (by first principles) |
 | :--- | :--- |
-| **Conclusion**: Add user billing support.<br>**Support**: Set up a payment microservice, deploy Kafka for event streaming, spin up DynamoDB for ledger records. | **Conclusion**: Add user billing support.<br>**Support**: Integrate Stripe SDK into the existing API, save transactions to the primary database using transactional checks. |
+| "We should use Redis because it's the standard caching tier." | "DB disk read latency is 10ms; RAM lookup is <1ms. At 15k RPS, DB disk IOPS saturate. In-memory cache removes the disk bottleneck." |
+| "Microservices are the industry standard for scale." | "A single Node process handles ~10k concurrent connections before event-loop saturation. Our peak is 50k. We need either cluster mode or horizontal services." |
 
-## Inductive vs. Deductive Reasoning: Choose Inductive
+If you catch yourself writing "industry standard" or "common practice", stop. Find the underlying constraint (RTT, IOPS, memory bandwidth, Big-O complexity, lock contention) and argue from there.
 
-To maximize reading speed and comprehension, structure your arguments using **Inductive Reasoning** rather than **Deductive Reasoning**:
+## Occam's Razor: Prune Before You Build
 
-* **Deductive Reasoning (演绎推理)** — Builds a logical chain of premises that leads to a conclusion (e.g., "A is true, B is true, therefore C must be done"). This forces the reader to follow your entire train of thought before getting the point. Avoid this in final reports.
-* **Inductive Reasoning (归纳推理)** — Starts with the conclusion, then groups similar facts or observations that support it (e.g., "We must do C because of 1, 2, and 3").
+When evaluating a proposed design, count the moving parts. Each new component (microservice, queue, database, third-party dependency, abstraction layer) must justify itself against a concrete non-functional requirement. Otherwise it's liability.
 
-### Comparison in Technical Writing:
+**Test**: For each component, ask "What requirement fails if I remove this?"
+- If the answer is "none" → **delete it**.
+- If the answer is speculative ("might need it for scale") → **defer it** with a measured trigger.
+- If the answer is concrete ("needed for durability per compliance") → **keep it**.
 
-| Reasoning Type | Structure | Example (Bug Diagnostic) |
-| :--- | :--- | :--- |
-| **Deductive** (Anti-pattern) | Premise 1 $\rightarrow$ Premise 2 $\rightarrow$ Conclusion | "React requires immutable state. Our reducer directly mutates state objects. Therefore, the UI components fail to trigger re-renders." |
-| **Inductive** (Preferred) | **Conclusion** $\rightarrow$ Supporting Fact 1 + 2 + 3 | "**The UI fails to re-render because of direct state mutation in the reducer.**<br>• The reducer bypasses immutable updates.<br>• React fails to detect state references changes.<br>• Component tree bypasses render lifecycle." |
+**Anti-pattern — speculative generality**:
+> Bad: "Add Kafka for event streaming, in case we need event-sourcing later."
+> Better: "Use the existing Postgres LISTEN/NOTIFY. Add Kafka only when measured event throughput exceeds 5k/sec."
 
-## Related
-- **Horizontal MECE Classification**: See [step-4-horizontal-structure.md](step-4-horizontal-structure.md) for how to ensure that each tier in your vertical pyramid has no overlapping arguments (Mutually Exclusive) and covers the full scope of details (Collectively Exhaustive).
-- **Executive Summaries**: See [agent-workflow.md](agent-workflow.md#phase-2-response-template) for how to place the top of the pyramid (your main conclusion) into the final response template.
+## Kepner-Tregoe Decision Matrix: Quantify the Choice
 
+For any 2+ option decision, replace prose argument with a structured table:
 
+**Decision**: [the question, e.g., "Choose the database for analytics workload"]
 
+### 1. MUSTs (binary gate)
+
+| Option | MUST: ingest >50k RPS | MUST: SQL | Status |
+| :--- | :--- | :--- | :--- |
+| A: Postgres replica | YES | YES | **GO** |
+| B: Elasticsearch | YES | NO | **NO-GO** |
+| C: ClickHouse | YES | YES | **GO** |
+
+Any option failing a MUST is eliminated. Do not score it.
+
+### 2. WANTs (weighted score)
+
+| Criterion | Weight | C: ClickHouse | A: Postgres |
+| :--- | :--- | :--- | :--- |
+| Storage cost (compression) | 8 | 9 / **72** | 4 / 32 |
+| Maintenance overhead | 7 | 5 / **35** | 10 / **70** |
+| Multi-dim query speed | 9 | 10 / **90** | 3 / 27 |
+| **Total** | — | **197** | **129** |
+
+### 3. Risk assessment (P × S) for the top scorer
+
+| Threat | P (1-10) | S (1-10) | P×S | Mitigation |
+| :--- | :--- | :--- | :--- | :--- |
+| Team lacks operational experience | 7 | 6 | **42** | Buy managed service |
+
+The matrix prevents "gut feel" decisions and exposes where the team is actually uncertain.
+
+## Pre-Mortem: Assume Failure, Plan Backwards
+
+Before recommending a plan, assume it has failed in production 6 months from now. Brainstorm 2-3 **specific** causes of failure, then add preventive tasks to the plan.
+
+**Anti-pattern**: "What could go wrong?" (too vague, produces nothing).
+**Better**: "It is 6 months later. The migration corrupted user data. What *specifically* caused it?"
+
+Common pre-mortem findings for software changes:
+- New validator throws on legacy data shape → add fixture test against 10k legacy records before deploy.
+- Dependency peer mismatch → audit `peerDependencies` in `package.json` before install.
+- Migration locks table → run during low-traffic window with explicit timeout.
+
+## See also
+- Audience tailoring: `step-2-goal-audience.md` (A→B + SCQA).
+- Bucketing supporting points: `step-4-horizontal-structure.md` (MECE + Rule of 3).

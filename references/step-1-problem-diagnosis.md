@@ -1,68 +1,71 @@
-# Step 1: Describe the Problem (5W2H & 5-Why)
+# Step 1: Diagnose the Problem (Cynefin + 5-Why + Fishbone)
 
-## 5W2H Framework
+Open this file when the task involves **root cause analysis** for an incident or non-trivial bug — especially when causation is unclear.
 
-Use the 5W2H framework to gather all necessary context:
+## Cynefin: Classify Before You Act
 
-| Question    | Purpose                                          |
-| ----------- | ------------------------------------------------ |
-| **What**    | Define the problem itself                        |
-| **When**    | Identify when the problem occurs                 |
-| **Where**   | Locate where it happens                          |
-| **Why**     | Understand why it happens                        |
-| **Who**     | Identify stakeholders                            |
-| **How**     | Describe the process                             |
-| **How much**| Assess the severity/extent                       |
+Most debugging mistakes come from applying the wrong action pattern to the wrong problem type. Use Cynefin first.
 
-Collecting these dimensions ensures you can choose what to include when communicating.
-
-## 5-Why Method
-
-When investigating causes, use the 5-Why method to go beyond surface symptoms.
-
-**Procedure:**
-1. Ask "why" the problem occurs
-2. Treat the answer as a new problem
-3. Ask "why" again
-4. Repeat until you reach the root cause (typically 5 iterations, but stop when the answer leads to a process/system failure rather than a person)
-
-**Anti-patterns to avoid:**
-- Stopping at the first convenient answer
-- Blaming individuals instead of processes
-- Asking "who" instead of "why"
-- Skipping levels (going from symptom directly to "system failure" without intermediate causes)
-
-**Example:**
-- Problem: Deploy failed in production
-- Why 1: The migration script timed out
-- Why 2: The script locked the users table for 4 minutes
-- Why 3: The migration added a NOT NULL column without a default
-- Why 4: The schema review checklist didn't flag missing defaults
-- Why 5: The checklist lives in a wiki that no one updates
-- **Root cause**: Schema review process is unenforced and stale
-
-## Cynefin Framework: Classifying Problem Complexity
-
-Before executing root-cause analysis (5-Why), categorize the problem using the **Cynefin Framework**. This dictates the appropriate action pattern and prevents you from "guessing" solutions to complex systems issues:
-
-| Domain | Problem Nature | Action Pattern | Agent Execution Guideline |
+| Domain | Signal | Action | Common mistake |
 | :--- | :--- | :--- | :--- |
-| **Clear** | Well-known, obvious bug (e.g., syntax error). | **Sense $\rightarrow$ Categorize $\rightarrow$ Respond** | Apply standard best practices immediately. Do not over-analyze. |
-| **Complicated** | Technical issue requiring analysis (e.g., query tuning). | **Sense $\rightarrow$ Analyze $\rightarrow$ Respond** | Perform analysis, compare options (e.g., KT Matrix), and implement the optimal solution. |
-| **Complex** | Emergent/unpredictable behavior (e.g., race conditions, memory leaks). | **Probe $\rightarrow$ Sense $\rightarrow$ Respond** | **Do not guess.** You cannot solve by static analysis. Propose a *probe* first (e.g., add telemetry logs, run profilers, write repro script). Executing the active probe is guided by the OODA Loop (see [agent-workflow.md](agent-workflow.md#operational-execution-debugging-with-the-ooda-loop)). |
-| **Chaotic** | Emergency outage, data corruption. | **Act $\rightarrow$ Sense $\rightarrow$ Respond** | **Stop the bleeding first.** Take immediate action (rollback, rate-limit, revert config) to stabilize the system, then analyze. |
+| **Clear** | Known bug, obvious fix (typo, syntax error). | Sense → Categorize → Respond. Apply best practice. | Over-analyzing trivial bugs. |
+| **Complicated** | Requires analysis but causes are knowable (query tuning, perf). | Sense → Analyze → Respond. Compare options. | Jumping to a fix without comparing. |
+| **Complex** | Emergent behavior (race conditions, memory leaks, retry storms). **You cannot solve this by reading code.** | Probe → Sense → Respond. Run a *probe* first (telemetry, repro script, profiler). | **Guessing** based on static analysis. |
+| **Chaotic** | Active outage, data corruption. | Act → Sense → Respond. Stop the bleeding first (rollback, rate-limit). | Investigating root cause while the system is still down. |
 
-## System Dynamics: Non-Linear Root-Cause Analysis
+If you classify a problem as Complex and find yourself writing "the cause is probably X, so I'll change Y" — stop. You're guessing. Run a probe instead.
 
-While **5-Why** analyzes linear cause-effect chains, it fails for complex software bottlenecks (e.g., retry storms, memory crashes, connection pool starvation). For these, apply **System Dynamics** to analyze non-linear feedback loops of **Stocks** (resources like connection pools, RAM, CPU) and **Flows** (rates like RPS, allocation speed):
+## 5-Why: Push to Process, Not Person
 
-* **Positive Reinforcing Loop (正反馈/增强回路)** — A cycle that accelerates system degradation (e.g., *Database CPU is high $\rightarrow$ queries slow down $\rightarrow$ API connections hold longer $\rightarrow$ client timeouts trigger retry storm $\rightarrow$ database crashes*).
-  * **Mitigation**: Do not apply naive linear fixes (like "increase query timeout," which keeps connections held longer). **Break the loop** (e.g., implement circuit breakers, rate limits, or exponential backoff with jitter).
-* **Negative Balancing Loop (负反馈/调节回路)** — A self-stabilizing cycle (e.g., *CPU load spikes $\rightarrow$ auto-scaler triggers $\rightarrow$ pod count increases $\rightarrow$ load per pod drops*).
-  * **Goal**: Maximize balancing loops to ensure system resilience.
+When causation is linear, ask "why" until you hit a **process or system failure**, not an individual mistake. Stop when the answer leads to an enforceable fix.
 
-## Related
-- **OODA Loops**: See [agent-workflow.md](agent-workflow.md#operational-execution-debugging-with-the-ooda-loop) for how to run iterative OODA debugging loops once the problem domain is diagnosed.
-- **Visualizing Root Causes**: See [step-5-visualize.md](step-5-visualize.md#mermaid-template-cause-and-effect-tree-fishbone-variant) to map out diagnosed causes using the Fishbone Mermaid diagram.
+**Anti-patterns**:
+- Stopping at the first convenient answer.
+- "Who" instead of "Why".
+- Skipping intermediate causes (symptom → "system failure" with no chain).
 
+**Example**:
+1. Deploy failed in production.
+2. Migration script timed out.
+3. Script locked `users` table for 4 minutes.
+4. Migration added NOT NULL column without default.
+5. Schema review checklist didn't flag missing defaults.
+→ **Root cause**: schema review process is unenforced. The fix is a CI check, not a person.
 
+## Fishbone Diagram (Mermaid template)
+
+When presenting root causes to a stakeholder, MECE-classify them into 3-4 categories and render as a horizontal tree:
+
+```mermaid
+graph LR
+    Disaster["Disaster: DB CPU at 100%"]
+
+    Infra["Infrastructure"] --> Disaster
+    AppCode["Application Code"] --> Disaster
+    Client["Client Behavior"] --> Disaster
+    Process["Deployment Process"] --> Disaster
+
+    DiskIO["Slow Disk IOPS"] --> Infra
+    ConnLimit["Low Max Connections"] --> Infra
+
+    NoIndex["Missing Index on orders"] --> AppCode
+    Leak["Connection Leak in middleware"] --> AppCode
+
+    Storm["Retry Storm during spike"] --> Client
+    HeavyQuery["Ad-hoc Analytics query"] --> Client
+
+    NoReview["No schema checklist review"] --> Process
+```
+
+This forces you to **MECE the hypotheses** (every cause fits exactly one bucket) before trying to fix anything.
+
+## System Dynamics: For Non-Linear Loops
+
+5-Why fails for feedback-loop problems (retry storms, pool starvation, cascading failures). Recognize:
+
+- **Reinforcing loop** (vicious cycle): high CPU → queries slow → connections held longer → clients retry → more load → crash. **Break the loop** (circuit breaker, backoff, rate-limit), don't apply linear fixes like "increase timeout".
+- **Balancing loop** (self-stabilizing): load spike → autoscaler → more pods → load per pod drops. Maximize these.
+
+## See also
+- Active debugging loop: `agent-workflow.md` (OODA + Save Point).
+- Visualizing ranked options: `step-3-vertical-structure.md` (KT Matrix).
