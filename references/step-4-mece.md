@@ -69,3 +69,14 @@ When describing or proposing a system architecture, avoid grouping purely by tec
 * Ensure each context owns its model and datastore, creating clean logical boundaries.
 * This achieves **structural MECE** in systems representation, as each business capability belongs to exactly one domain context.
 
+### 3. Pareto 80/20 Rule (For Prioritization & Horizontal Ordering)
+
+When presenting causes of a bug or multiple proposed solutions horizontally, avoid displaying a flat list of 10+ items of equal weight. Apply the **Pareto Principle** to sort by importance and focus the audience on the vital few:
+
+* Identify the **critical 20%** of factors that generate **80%** of the impact or risk.
+* Structure your horizontal layout by splitting items into two groups:
+  1. **Core Drivers** (Top 2-3 items of high impact/severity).
+  2. **Secondary/Long-Tail Factors** (Grouped together or relegated to a "Future Considerations" category).
+* This preserves MECE structure (items are partitioned cleanly by impact tier) while preventing cognitive overload.
+
+

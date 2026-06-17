@@ -59,3 +59,21 @@ Use **SCQA** to write the executive-level introduction (conclusion-first), then 
 * **Action**: Identified a rogue loop in the logging middleware, deployed a hotfix to bypass it, and scaled gateway pods from 3 to 10 replicas.
 * **Result**: CPU utilization dropped to 22%, 502 errors ceased, and the checkout success rate returned to 100% within 12 minutes.
 
+## SMART Goals: Setting Actionable Targets
+
+When formulating the **Expected Behavior (A→B)** or defining tasks in the **STAR** framework, avoid vague, non-committal goals. Apply the **SMART** principle to ensure that any goal proposed by the agent is actionable, measurable, and clear:
+
+* **Specific (S)** — Target a precise area for improvement. Avoid vague statements like "optimize query speed." Use "add index and rewrite SQL join."
+* **Measurable (M)** — Define a quantitative metric of success. (e.g., "reduce query execution time from 500ms to <20ms," "decrease memory footprint by 30%").
+* **Achievable (A)** — Ensure the goal is realistic given constraints (e.g., locking tables during production hours makes immediate schema changes unachievable; schedule a migration instead).
+* **Relevant (R)** — Align the goal with the parent problem. (e.g., if the user's constraint is network egress cost, optimizing CPU usage is secondary).
+* **Time-bound (T)** — State a clear deadline, estimation, or window. (e.g., "restore connection pool limits in 5 minutes," "deliver the refactoring proposal by end-of-day").
+
+### Anti-pattern vs. SMART Goal Comparison:
+
+| Vague Goal (Anti-pattern) | SMART Goal |
+| :--- | :--- |
+| "We need to fix the database performance soon." | "Add a composite index on `orders(user_id, created_at)` to bring the slow query list under 50ms by tomorrow morning." |
+| "Let's clean up the code to make it more readable." | "Refactor `large-auth-service.ts` by splitting its 6 methods into separate helper classes, reducing file size from 600 lines to under 200 lines by Friday." |
+
+
