@@ -135,6 +135,40 @@
           "type": "llm_judge"
         }
       ]
+    },
+    {
+      "id": 6,
+      "name": "multi-cause-performance-ranking",
+      "prompt": "Our e-commerce checkout API is slow. p99 latency is 3.2 seconds (target is 800ms). Here's everything we've found. Figure out what to fix first and write a prioritized plan for the engineering team:\n\n1. The database has no index on orders.user_id — joins scan 40M rows.\n2. The React frontend re-renders the whole cart on every keystroke in the promo code field.\n3. We're calling Stripe's API synchronously during checkout (adds ~600ms).\n4. The CDN cache miss rate jumped to 70% last week after a config change.\n5. There's a memory leak in the auth middleware — pods restart every ~4 hours.\n6. Product images aren't optimized — average 2.4MB each, loading 12 per checkout page.\n7. The payment service makes 3 sequential DB queries that could be 1.\n8. We're on Postgres 12 (current is 16) and the query planner is producing bad plans on 2 hot queries.\n\nWe have 2 engineers for 3 weeks. What do we do?",
+      "expected_output": "Response that applies Pareto (identifies the vital few issues driving most of the 2.4s overrun), groups issues MECE-style (not a flat list of 8), ranks them by impact-vs-effort, and fits the work into the 2-engineer/3-week constraint. Must NOT present all 8 issues with equal weight or a flat numbered list.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "pareto-ranking",
+          "description": "Identifies the vital few issues (2-3) driving the majority of latency, rather than treating all 8 equally",
+          "type": "llm_judge"
+        },
+        {
+          "name": "mece-grouping",
+          "description": "Groups the 8 issues into clean categories (e.g., by query/backend/frontend/infra), not a flat list",
+          "type": "llm_judge"
+        },
+        {
+          "name": "impact-vs-effort",
+          "description": "Ranks or scores issues by impact vs effort (or uses a matrix/weighting), not just gut-feel ordering",
+          "type": "llm_judge"
+        },
+        {
+          "name": "constraint-aware",
+          "description": "Plan explicitly fits within the 2-engineer / 3-week budget — acknowledges what gets deferred and why",
+          "type": "llm_judge"
+        },
+        {
+          "name": "conclusion-first",
+          "description": "Opens with the prioritized recommendation (what to fix first), not 'Let me analyze each issue'",
+          "type": "llm_judge"
+        }
+      ]
     }
   ]
 }
