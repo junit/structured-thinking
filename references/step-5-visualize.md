@@ -22,12 +22,66 @@ Pick the diagram type that matches the relationship:
 - Flowchart for a 2-step process — just write the two steps.
 - 3D / gradient / shadow decoration that doesn't encode information.
 - Repeating in prose what the diagram already shows.
+- Using a diagram when a 3-row table would be clearer — diagrams should earn their complexity.
 
 ## Tools
 
 - **Mermaid** (inline in markdown) — preferred for flowcharts, sequence diagrams, Gantt, simple trees. Renders in GitHub, most markdown viewers.
-- **Tables** — preferred for structured comparisons, option matrices.
+- **Tables** — preferred for structured comparisons, option matrices. Faster to read than diagrams for <5 items.
 - **External** — draw.io / Excalidraw for hand-drawn feel; native chart libraries for data plots.
+
+## Mermaid Templates (copy-paste and adapt)
+
+### Process Flow (CI/CD, deploy pipeline, request handling)
+
+```mermaid
+flowchart LR
+    A["PR Merged"] --> B["Build & Test"]
+    B --> C{"Tests Pass?"}
+    C -->|Yes| D["Deploy to Staging"]
+    C -->|No| E["Notify Author"]
+    D --> F["Smoke Test"]
+    F --> G{"Healthy?"}
+    G -->|Yes| H["Deploy to Prod"]
+    G -->|No| I["Rollback"]
+```
+
+### Sequence Diagram (API calls, service interactions)
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant G as API Gateway
+    participant S as Service
+    participant D as Database
+    C->>G: POST /api/resource
+    G->>S: Validate + Forward
+    S->>D: INSERT
+    D-->>S: OK
+    S-->>G: 201 Created
+    G-->>C: Response + Location header
+```
+
+### Decision Tree (troubleshooting, triage)
+
+```mermaid
+flowchart TD
+    Start["Error reported"] --> Q1{"Reproducible?"}
+    Q1 -->|Yes| Q2{"In latest release?"}
+    Q1 -->|No| A1["Collect logs + environment details"]
+    Q2 -->|Yes| A2["File bug: P1 if blocking, P2 otherwise"]
+    Q2 -->|No| A3["Check if already fixed in changelog"]
+```
+
+### Cycle Diagram (feedback loops, iterative processes)
+
+```mermaid
+flowchart LR
+    Plan["Plan"] --> Do["Do"]
+    Do --> Check["Check"]
+    Check --> Act["Act"]
+    Act --> Plan
+```
 
 ## KT Matrix Reference
 
@@ -38,3 +92,4 @@ Use a KT Matrix **whenever you have 2+ options and the audience needs to see why
 ## See also
 - KT Matrix full template: `step-3-vertical-structure.md`.
 - Fishbone cause-and-effect diagram: `step-1-problem-diagnosis.md`.
+- OODA cycle diagram: `agent-workflow.md`.

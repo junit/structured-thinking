@@ -32,6 +32,16 @@ Pick the order that matches the audience's state of mind:
 
 Most technical reports should use **ASCQ** — the conclusion-first ordering also required by Pattern 1 of the core skill. Reserve SCQA for situations where the audience needs the context before they'll accept the answer.
 
+### Worked example: same incident, two orderings
+
+**ASCQ (for VP — conclusion-first):**
+> The checkout outage cost $200k and was caused by a connection leak in the v1.2.4 rollback deploy. *[Answer]* We deployed v1.2.4 at 13:55 to fix a cart bug. *[Situation]* The deploy introduced a missing `finally` block that leaked DB connections, exhausting the pool within 5 minutes. *[Complication]* Should we mandate ESLint connection-safety rules and add pool-exhaustion alerts? *[Question]*
+
+**SCQA (for post-mortem audience — needs context first):**
+> At 13:55 we deployed v1.2.4 to fix a cart calculation bug — a routine hotfix. *[Situation]* Within 5 minutes, the DB connection pool was exhausted because the hotfix introduced a missing `finally` block in the checkout middleware. The DBA restarted the DB, but connections re-exhausted immediately. *[Complication]* How do we prevent connection leaks from reaching production? *[Question]* Mandate ESLint `no-floating-connection` rule in CI, and add a pool-utilization alert at 80% threshold. *[Answer]*
+
+The VP version leads with impact and cost; the post-mortem version builds the causal chain so attendees can follow the reasoning.
+
 ## Fogg Behavior Model (B=MAP) — for Actionable Guides
 
 When you want the Actor to actually do something (run a command, adopt a pattern, follow a guide), make sure all three elements converge:

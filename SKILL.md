@@ -1,6 +1,6 @@
 ---
 name: structured-thinking
-description: "Use whenever you are about to present complex information to a user — incident reports, postmortems, design reviews, refactoring proposals, debugging summaries, PR descriptions, status updates, technical recommendations, or any response where you might dump raw logs, timelines, or unstructured narrative. Trigger proactively on phrases like 'write a report', 'summarize', 'propose', 'review this design', 'what should we do about', 'help me decide', or whenever a response could otherwise become a wall of text. Even short answers benefit when the user needs to make a decision."
+description: "Use whenever you are about to present complex information to a user — incident reports, postmortems, design reviews, refactoring proposals, debugging summaries, PR descriptions, status updates, technical recommendations, architecture decisions, trade-off analyses, or any response where you might dump raw logs, timelines, or unstructured narrative. Trigger proactively on phrases like 'write a report', 'summarize', 'propose', 'review this design', 'what should we do about', 'help me decide', 'compare these options', 'what went wrong', 'explain the situation', or whenever a response could otherwise become a wall of text. Also use when the user provides raw data (logs, metrics, error traces) and expects a synthesized conclusion rather than a reformatted dump. Even short answers benefit when the user needs to make a decision — if you're about to write more than 3 paragraphs, this skill almost certainly applies."
 ---
 
 # Structured Thinking
@@ -18,13 +18,15 @@ A communication discipline that forces conclusions to the top, supports them wit
 
 Before opening any reference file, classify the task:
 
-| Tier | Signals | Action |
-| :--- | :--- | :--- |
-| **Trivial** (1-2 sentence answer) | User asks a single yes/no or lookup question. | Stop. Answer directly. Do not read references. |
-| **Moderate** (one short structured response) | Summary, status update, simple recommendation. | Use only the **Three Core Patterns** below. Skip references. |
-| **Complex** (full report, design doc, postmortem, multi-option decision) | Multiple findings, options, or stakeholders; raw logs/timeline involved. | Use Core Patterns + open the relevant `references/` file. |
+| Tier | Signals | Action | Target length |
+| :--- | :--- | :--- | :--- |
+| **Trivial** (1-2 sentence answer) | User asks a single yes/no or lookup question. | Stop. Answer directly. Do not read references. | 1-3 sentences |
+| **Moderate** (one short structured response) | Summary, status update, simple recommendation. | Use the **Three Core Patterns** below. Skip references unless you realize mid-draft that the problem is deeper than expected. | 100-300 words |
+| **Complex** (full report, design doc, postmortem, multi-option decision) | Multiple findings, options, or stakeholders; raw logs/timeline involved. | Use Core Patterns + open the relevant `references/` file. | 300-800 words |
 
 The triage exists because reading every reference costs ~30 seconds of latency. Spend it only when the response genuinely needs depth.
+
+**Escalation rule**: If you start drafting a Moderate response and discover hidden depth (multiple root causes, competing options, multi-stakeholder impact), upgrade to Complex mid-stream. Don't force a shallow structure onto a deep problem.
 
 ## The Three Core Patterns (apply to every Moderate and Complex response)
 
@@ -59,6 +61,37 @@ The last section of any Moderate or Complex response tells the audience **what t
 
 A response without an explicit ask is informational noise. The audience has to invent the action — which is exactly what structured communication is meant to prevent.
 
+## Output Template (all 3 patterns in action)
+
+Use this shape for every Moderate and Complex response. Adapt section names to the actual content — these are structural slots, not fixed headings.
+
+```
+[1-2 sentence conclusion: decision / impact / recommendation]
+
+## [Bucket 1: conclusion-style header]
+[Supporting evidence, data, or reasoning — 2-5 bullets or short paragraphs]
+
+## [Bucket 2: conclusion-style header]
+[Supporting evidence, data, or reasoning]
+
+## [Bucket 3: conclusion-style header] (optional for Moderate)
+[Supporting evidence, data, or reasoning]
+
+## Next Action / Decisions Requested / Open Questions
+- [Specific ask #1]
+- [Specific ask #2]
+```
+
+For **Moderate** responses, 2 buckets and a shorter ask section is often enough. For **Complex** responses, use 3 buckets and a more detailed ask.
+
+### Data presentation rule
+
+When evidence includes numbers (metrics, costs, benchmarks, SLA targets), present them in a table or inline comparison — not buried in prose. Quantitative evidence that the reader has to hunt for is evidence they won't use.
+
+### Multi-audience responses
+
+When the same output serves different audiences (e.g., VP + engineering team), use a **layered structure**: lead with the executive summary (2-3 sentences for the VP), then expand into technical detail (for the engineers). The VP stops reading after the summary; the engineer reads on. Both get what they need without a separate document.
+
 ## When to Go Deeper (Complex tier only)
 
 Open these reference files when the situation matches:
@@ -81,6 +114,8 @@ You do not need to read all six. Pick the one matching the task. The references 
 - The response has no explicit ask or next action.
 - Paragraphs of narrative that don't help the audience make a decision.
 - Multiple options presented without a scoring matrix or recommendation.
+- Numbers or metrics buried in prose instead of a table or inline comparison.
+- A "Moderate" response growing past 300 words — it's probably Complex, escalate.
 
 ## Self-Verification Checklist
 

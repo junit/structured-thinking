@@ -1,5 +1,9 @@
 # Tool Cache & Config
 .serena/
+.ruff_cache/
+
+# Skill evaluation workspace (test run artifacts: reports, grading, timing)
+structured-thinking-workspace/
 
 # IDE & Editor Settings
 .vscode/

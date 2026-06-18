@@ -13,12 +13,16 @@ At every level of grouping, categories must be:
 
 ### Four proven axes (when classification is hard)
 
-| Axis | Example |
-| :--- | :--- |
-| **Temporal** | Steps in a workflow, project phases, historical timeline |
-| **Structural** | Regions, layers of a stack, components |
-| **Qualitative** | Pros vs. cons, internal vs. external, cost vs. benefit |
-| **Quantitative** | High/medium/low priority, market segments, age brackets |
+Pick the axis that best serves the audience's decision. If unsure, use this heuristic:
+
+| Axis | Example | Best when... |
+| :--- | :--- | :--- |
+| **Temporal** | Steps in a workflow, project phases, historical timeline | The audience needs to follow a sequence or plan |
+| **Structural** | Regions, layers of a stack, components | The audience needs to understand *where* things live |
+| **Qualitative** | Pros vs. cons, internal vs. external, cost vs. benefit | The audience needs to compare trade-offs |
+| **Quantitative** | High/medium/low priority, market segments, age brackets | The audience needs to rank or triage items |
+
+When two axes seem equally valid, prefer the one that makes the **first bucket header** a conclusion the audience can act on. "Critical: fix before release" beats "Phase 1" because it tells the reader what to do, not just when.
 
 ## Pareto 80/20: Vital Few Over Long Tails
 

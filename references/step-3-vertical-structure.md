@@ -66,10 +66,23 @@ Before recommending a plan, assume it has failed in production 6 months from now
 **Anti-pattern**: "What could go wrong?" (too vague, produces nothing).
 **Better**: "It is 6 months later. The migration corrupted user data. What *specifically* caused it?"
 
-Common pre-mortem findings for software changes:
-- New validator throws on legacy data shape → add fixture test against 10k legacy records before deploy.
-- Dependency peer mismatch → audit `peerDependencies` in `package.json` before install.
-- Migration locks table → run during low-traffic window with explicit timeout.
+### How to run a Pre-Mortem
+
+1. **Set the scene**: State the plan and declare it has failed catastrophically. Be specific about the failure mode — "data loss", "performance regression", "security breach", not just "it didn't work".
+2. **Brainstorm causes**: For each failure mode, trace backwards to a plausible root cause. Aim for 2-3 causes per failure mode. Prioritize causes that are *invisible during development* (race conditions, edge-case data shapes, dependency upgrades, traffic patterns).
+3. **Convert to safeguards**: Each cause becomes a preventive action item in the plan — a test, a check, a gate, or a monitoring alert.
+
+### Common pre-mortem findings by category
+
+| Category | Example finding | Preventive action |
+| :--- | :--- | :--- |
+| **Data shape** | New validator throws on legacy records with null fields | Fixture test against 10k legacy records before deploy |
+| **Dependencies** | Peer dependency mismatch breaks silently after `npm update` | Pin versions + audit `peerDependencies` in CI |
+| **Concurrency** | Migration locks table for 4 minutes during peak traffic | Run during low-traffic window with explicit lock timeout |
+| **Rollback** | No way to reverse the schema change once applied | Write and test the down-migration before deploying the up-migration |
+| **Observability** | Failure is silent — no alert fires until users complain | Add health check endpoint + pool-utilization alert at 80% |
+
+The value of a Pre-Mortem is that it turns "unknown unknowns" into "known risks with mitigations" — before launch, when fixes are cheap.
 
 ## See also
 - Audience tailoring: `step-2-goal-audience.md` (A→B + SCQA).

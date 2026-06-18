@@ -1,0 +1,140 @@
+{
+  "skill_name": "structured-thinking",
+  "evals": [
+    {
+      "id": 1,
+      "name": "incident-report-chronological-pressure",
+      "prompt": "We had an outage today! Here are the logs and what we did. Please write a report for the VP of Engineering:\n13:00 - Alert triggered: API latency spiked to 4.5 seconds.\n13:05 - Checked server dashboard. CPU usage on web-01 and web-02 was at 99%.\n13:10 - SRE team suspected a memory leak in the recently deployed v1.2.4 version.\n13:15 - Initiated a container restart on all web pods. CPU dropped briefly but spiked back to 99% within 2 minutes.\n13:20 - Developer analyzed access logs and noticed a massive spike in requests to `/api/v1/search` from a single IP range (198.51.100.0/24).\n13:25 - Realized it was a scraper bot scraping our product catalog without rate limiting.\n13:30 - Added an IP block rule in Cloudflare.\n13:35 - Latency normalized to 200ms. CPU usage dropped to 15%. Outage resolved.",
+      "expected_output": "Report that opens with executive summary (impact + resolution), groups details into 3 buckets with conclusion-style headers, ends with explicit next actions. Does NOT start with '13:00' or chronological narrative.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "conclusion-first",
+          "description": "First sentence contains resolution/impact, not 'At 13:00' or 'First'",
+          "type": "llm_judge"
+        },
+        {
+          "name": "grouped-buckets",
+          "description": "Evidence organized into 2-4 buckets with conclusion-style headers (not 'Details' or 'Background')",
+          "type": "llm_judge"
+        },
+        {
+          "name": "explicit-ask",
+          "description": "Ends with an explicit ask section (next actions, decisions requested, or open questions)",
+          "type": "llm_judge"
+        },
+        {
+          "name": "no-raw-dump",
+          "description": "Raw logs are synthesized, not copy-pasted verbatim",
+          "type": "llm_judge"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "refactoring-over-engineering-pressure",
+      "prompt": "We need to add a simple PDF export feature for user invoices. The tech lead suggested we spin up a new Node.js microservice running Puppeteer, configure an AWS SQS queue to handle export events, store the PDFs in an S3 bucket, and set up a Lambda function to clean up old PDFs. What do you think of this design? Propose a solution.",
+      "expected_output": "Response that challenges the over-engineered proposal using Occam's Razor, recommends a simpler alternative first, provides a comparison table (KT Matrix or similar), and ends with a clear recommendation.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "challenges-complexity",
+          "description": "Explicitly questions or challenges the over-engineered microservice+SQS+S3+Lambda design",
+          "type": "llm_judge"
+        },
+        {
+          "name": "simpler-alternative",
+          "description": "Proposes a simpler in-process alternative (e.g., pdfkit, jsPDF, or similar) as the primary recommendation",
+          "type": "llm_judge"
+        },
+        {
+          "name": "comparison-table",
+          "description": "Includes a structured comparison table or matrix comparing the two approaches",
+          "type": "llm_judge"
+        },
+        {
+          "name": "explicit-recommendation",
+          "description": "Ends with a clear recommendation and next action, not 'it depends'",
+          "type": "llm_judge"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "debugging-ooda-discipline",
+      "prompt": "The CI test pipeline is failing with `TypeError: Cannot read properties of undefined (reading 'map')` in `user-service.ts` line 42. You need to fix it. Do not guess. Walk through your debugging process and explain how you will verify and revert changes if they don't work.",
+      "expected_output": "Response that applies OODA loop (Observe, Orient, Decide, Act), proposes one hypothesis at a time, mentions save point / revert strategy, and does not suggest multiple simultaneous code changes.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "ooda-structure",
+          "description": "Response follows OODA loop structure (Observe, Orient, Decide, Act) either explicitly named or clearly demonstrated",
+          "type": "llm_judge"
+        },
+        {
+          "name": "single-hypothesis",
+          "description": "Proposes one testable hypothesis at a time, not 3 simultaneous fixes",
+          "type": "llm_judge"
+        },
+        {
+          "name": "revert-strategy",
+          "description": "Explicitly mentions reverting changes (git restore, git reset, etc.) if the fix doesn't work",
+          "type": "llm_judge"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "multi-audience-status-update",
+      "prompt": "Write a status update about our database migration project. The migration from MySQL to PostgreSQL is 70% complete. We've migrated the users table (50M rows, took 3 hours), the orders table (120M rows, took 8 hours), and the products table (2M rows, took 15 minutes). The payments table (80M rows) and the audit_log table (500M rows) are still pending. We discovered that 12% of audit_log records have malformed JSON in the metadata column that needs cleaning before migration. The team is on track for the July 15 deadline but the audit_log issue adds risk. This needs to go to both the VP (who cares about timeline and risk) and the engineering team (who need technical details for the remaining work).",
+      "expected_output": "Response with a layered structure: executive summary for VP (2-3 sentences with timeline/risk), followed by technical detail for engineers. Includes data in a table, not buried in prose.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "layered-structure",
+          "description": "Has a clear executive summary layer followed by technical detail layer, serving both VP and engineering audiences",
+          "type": "llm_judge"
+        },
+        {
+          "name": "data-in-table",
+          "description": "Migration metrics (table names, row counts, durations) are presented in a table or structured format, not buried in prose",
+          "type": "llm_judge"
+        },
+        {
+          "name": "risk-highlighted",
+          "description": "The audit_log JSON malformation risk is prominently called out, not buried in a list",
+          "type": "llm_judge"
+        },
+        {
+          "name": "explicit-ask",
+          "description": "Ends with explicit next actions or decisions needed",
+          "type": "llm_judge"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "moderate-tier-recommendation",
+      "prompt": "Should we use Redis or Memcached for our session cache? We have about 10k concurrent users and sessions expire after 30 minutes.",
+      "expected_output": "A short (100-300 word) structured response: conclusion first (one recommended), 2 supporting reasons grouped with headers, and a one-line next action. Should NOT be a 500+ word essay.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "conclusion-first",
+          "description": "Opens with a clear recommendation (one of the two options), not 'Let me compare...'",
+          "type": "llm_judge"
+        },
+        {
+          "name": "moderate-length",
+          "description": "Response is 100-400 words, not a 500+ word essay — appropriate for a Moderate-tier question",
+          "type": "llm_judge"
+        },
+        {
+          "name": "explicit-ask",
+          "description": "Ends with a next action or decision point",
+          "type": "llm_judge"
+        }
+      ]
+    }
+  ]
+}
